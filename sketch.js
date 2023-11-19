@@ -146,3 +146,4 @@ function keyPressed() {
   }
   //console.log(event)
 }
+// how to break code: ands and ors, i j k, -1, ==
