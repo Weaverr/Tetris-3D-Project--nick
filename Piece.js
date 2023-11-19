@@ -73,6 +73,13 @@ class peice {
     getMasterPos() {
         return (this.boxArr[0].getPos())
     }
+    getAllPos(){
+        let allPos = []
+        for (let i = 0; i < this.boxArr.length; i++) {
+            allPos[i] = this.boxArr[i].getPos()
+        }
+        return(allPos)
+    }
 
     setPos(masterLocation) {
         this.masterLocation = masterLocation
