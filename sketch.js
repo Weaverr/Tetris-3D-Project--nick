@@ -5,6 +5,12 @@ let myTetrisgridF;
 let timer = 100;
 let peiceQueue
 let queuePointer = 0
+let gameState = "play"
+//game state is a good way to to menus and pause and shit
+//i will set it to "over" when the game is over
+//"play" when the game is playing
+//change the gameState to something else as its the same in my program and looks bait
+
 
 function setup() {
   createCanvas(windowWidth, windowHeight, WEBGL);
@@ -15,16 +21,16 @@ function setup() {
   myTetrisgridL = new Tetrisgrid(100, 300, 0, 50, -155, 1, 0, 90, 255, { r: 0, g: 0, b: 0 });
   myTetrisgridR = new Tetrisgrid(100, 300, 0, 0, -155, -50, 0, 0, 255, { r: 0, g: 0, b: 0 });
   myTetrisgridF = new Tetrisgrid(100, 100, 0, 0, -5, 0, 90, 0, 255, { r: 0, g: 0, b: 0 });
-
   box1 = new peice(0, { x: 0, layerNum: 30, z: 0, }, { r: 0, g: 0, b: 255 }, { r: 255, g: 255, b: 255 })
-
   peiceQueue = [box1]
 }
 let Gravity = () => {
-  if ((!(peiceQueue[queuePointer].getMasterPos().layerNum < 0)) && !(collisionDetection())) {
+  peiceDropLogic()
+}
+
+function peiceDropLogic(){
+  if ((!(peiceQueue[queuePointer].getMasterPos().layerNum < 0)) && !(collisionDetection()) && gameState == "play") {
     peiceQueue[queuePointer].drop()
-
-
   } else {
     //generate new peicee
     queuePointer++
@@ -53,6 +59,9 @@ function collisionDetection() {
         if (peiceBoxPos[j].layerNum == (peiceMoveBoxPos[k].layerNum - 1)){
           if (peiceBoxPos[j].x == peiceMoveBoxPos[k].x && peiceBoxPos[j].z == peiceMoveBoxPos[k].z) {
             //compares between current peice in queue and current moving peice and returns true if they will collide
+            if (peiceMoveBoxPos[k].layerNum >= 25){
+              gameState = "over"
+            }
             return true
           }
         }
@@ -70,12 +79,16 @@ function draw() {
 }
 
 function inputs() {
-
+  if(keyIsDown(32)){
+    peiceDropLogic()
+  }
 }
 
 
 function processes() {
-
+  if(gameState == "over"){
+    console.log("Game Over")
+  }
 }
 
 
