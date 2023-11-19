@@ -21,23 +21,47 @@ function setup() {
   peiceQueue = [box1]
 }
 let Gravity = () => {
-  if (!(peiceQueue[queuePointer].getMasterPos().layerNum < 0)) {
+  if ((!(peiceQueue[queuePointer].getMasterPos().layerNum < 0)) && !(collisionDetection())) {
     peiceQueue[queuePointer].drop()
+
+
   } else {
+    //generate new peicee
     queuePointer++
     peiceQueue[queuePointer] = new peice(Math.round(Math.random() * 3), { x: 0, layerNum: 30, z: 0, }, { r: (Math.round(Math.random() * 255)), g: (Math.round(Math.random() * 255)), b: (Math.round(Math.random() * 255)) }, { r: (Math.round(Math.random() * 255)), g: (Math.round(Math.random() * 255)), b: (Math.round(Math.random() * 255)) })
     let xRandom
     let zRandom
     do {
-      xRandom = (Math.round(Math.random() * 9))
-    } while (xRandom > (9 - peiceQueue[queuePointer].getDimensions.x))
+      xRandom = (Math.round(Math.random() * 8))
+    } while (xRandom >= (9 - peiceQueue[queuePointer].getDimensions.x))
     do {
-      zRandom = (Math.round(Math.random() * 9))
-    } while (zRandom > (9 - peiceQueue[queuePointer].getDimensions.z))
+      zRandom = (Math.round(Math.random() * 8))
+    } while (zRandom >= (9 - peiceQueue[queuePointer].getDimensions.z))
     peiceQueue[queuePointer].setPos({ x: xRandom, layerNum: 30, z: zRandom })
   }
 }
 
+function collisionDetection() {
+  let peiceMoveBoxPos = peiceQueue[queuePointer].getAllPos()
+  for (let i = 0; i < (peiceQueue.length - 1); i++) {
+    //Iterates through the peice queue without the active peice
+    let peiceBoxPos = peiceQueue[i].getAllPos()
+    for (let j = 0; j < peiceBoxPos.length; j++) {
+      //Iterates through the current peice in queue      
+      for (let k = 0; k < peiceMoveBoxPos.length; k++) {
+        //Iterates through the current moving peice
+        if (peiceBoxPos[j].layerNum == (peiceMoveBoxPos[k].layerNum - 1)){
+          if (peiceBoxPos[j].x == peiceMoveBoxPos[k].x && peiceBoxPos[j].z == peiceMoveBoxPos[k].z) {
+            //compares between current peice in queue and current moving peice and returns true if they will collide
+            return true
+          }
+        }
+      }
+    }
+  }
+
+  return false
+}
 
 function draw() {
   inputs();
