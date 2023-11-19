@@ -92,12 +92,45 @@ class peice {
             this.boxArr[6] = new boxHandler({ x: this.masterLocation.x, layerNum: this.masterLocation.layerNum + 1, z: this.masterLocation.z + 1 }, this.color, this.fill);
             this.boxArr[7] = new boxHandler({ x: this.masterLocation.x + 1, layerNum: this.masterLocation.layerNum + 1, z: this.masterLocation.z + 1 }, this.color, this.fill);
         }
+        if (this.peiceType == 1) {
+            //tPeice
+            //peicetype left as number so it can be randomised
+            this.boxArr[0] = new boxHandler({ x: this.masterLocation.x, layerNum: this.masterLocation.layerNum, z: this.masterLocation.z }, this.color, this.fill);
+            this.boxArr[1] = new boxHandler({ x: this.masterLocation.x + 1, layerNum: this.masterLocation.layerNum, z: this.masterLocation.z }, this.color, this.fill);
+            this.boxArr[2] = new boxHandler({ x: this.masterLocation.x + 2, layerNum: this.masterLocation.layerNum, z: this.masterLocation.z }, this.color, this.fill);
+            this.boxArr[3] = new boxHandler({ x: this.masterLocation.x + 1, layerNum: this.masterLocation.layerNum, z: this.masterLocation.z + 1 }, this.color, this.fill);
+        }
+        if (this.peiceType == 2) {
+            //lPeice
+            //peicetype left as number so it can be randomised
+            this.boxArr[0] = new boxHandler({ x: this.masterLocation.x, layerNum: this.masterLocation.layerNum, z: this.masterLocation.z }, this.color, this.fill);
+            this.boxArr[1] = new boxHandler({ x: this.masterLocation.x + 1, layerNum: this.masterLocation.layerNum, z: this.masterLocation.z }, this.color, this.fill);
+            this.boxArr[2] = new boxHandler({ x: this.masterLocation.x + 2, layerNum: this.masterLocation.layerNum, z: this.masterLocation.z }, this.color, this.fill);
+            this.boxArr[3] = new boxHandler({ x: this.masterLocation.x, layerNum: this.masterLocation.layerNum, z: this.masterLocation.z + 1 }, this.color, this.fill);
+        }
+        if (this.peiceType == 3) {
+            //line
+            //peicetype left as number so it can be randomised
+            this.boxArr[0] = new boxHandler({ x: this.masterLocation.x, layerNum: this.masterLocation.layerNum, z: this.masterLocation.z }, this.color, this.fill);
+            this.boxArr[1] = new boxHandler({ x: this.masterLocation.x + 1, layerNum: this.masterLocation.layerNum, z: this.masterLocation.z }, this.color, this.fill);
+            this.boxArr[2] = new boxHandler({ x: this.masterLocation.x + 2, layerNum: this.masterLocation.layerNum, z: this.masterLocation.z }, this.color, this.fill);
+            this.boxArr[3] = new boxHandler({ x: this.masterLocation.x + 3, layerNum: this.masterLocation.layerNum, z: this.masterLocation.z }, this.color, this.fill);
+        }
 
     }
 
     getDimensions() {
         if (this.peiceType == 0) {
             return ({ x: 2, y: 2, z: 2 })
+        }
+        if (this.peiceType == 1) {
+            return ({ x: 3, y: 1, z: 2 })
+        }
+        if (this.peiceType == 2) {
+            return ({ x: 3, y: 1, z: 2 })
+        }
+        if (this.peiceType == 3) {
+            return ({ x: 4, y: 1, z: 1 })
         }
     }
 }
