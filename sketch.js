@@ -2,7 +2,7 @@
 let myTetrisgridL;
 let myTetrisgridR;
 let myTetrisgridF;
-let timer = 100;
+let timer = 1000;
 let peiceQueue
 let queuePointer = 0
 let gameState = "play"
@@ -21,7 +21,7 @@ function setup() {
   myTetrisgridL = new Tetrisgrid(100, 300, 0, 50, -155, 1, 0, 90, 255, { r: 0, g: 0, b: 0 });
   myTetrisgridR = new Tetrisgrid(100, 300, 0, 0, -155, -50, 0, 0, 255, { r: 0, g: 0, b: 0 });
   myTetrisgridF = new Tetrisgrid(100, 100, 0, 0, -5, 0, 90, 0, 255, { r: 0, g: 0, b: 0 });
-  box1 = new peice(0, { x: 0, layerNum: 30, z: 0, }, { r: 0, g: 0, b: 255 }, { r: 255, g: 255, b: 255 })
+  box1 = new peice(1, { x: 0, layerNum: 30, z: 0, }, { r: 0, g: 0, b: 255 }, { r: 255, g: 255, b: 255 })
   peiceQueue = [box1]
 }
 let Gravity = () => {
