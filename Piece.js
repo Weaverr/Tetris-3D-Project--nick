@@ -75,6 +75,8 @@ class peice {
     getMasterPos() {
         return (this.boxArr[0].getPos())
     }
+
+
     getAllPos() {
         let allPos = []
         for (let i = 0; i < this.boxArr.length; i++) {
@@ -85,7 +87,8 @@ class peice {
 
     setPos(masterLocation) {
         this.masterLocation = masterLocation
-        this.peiceInitialise()
+        this.boxArr[0].setPos({ x: this.masterLocation.x, layerNum: this.masterLocation.layerNum, z: this.masterLocation.z })
+        this.updatePos()
     }
 
     rotateL() {
@@ -152,6 +155,16 @@ class peice {
     }
 
     updatePos() {
+        if (this.peiceType == 0){
+            this.boxArr[1].setPos({ x: this.getMasterPos().x + 1, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z })
+            this.boxArr[2].setPos({ x: this.getMasterPos().x, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z + 1 })
+            this.boxArr[3].setPos({ x: this.getMasterPos().x + 1, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z + 1 })
+            this.boxArr[4].setPos({ x: this.getMasterPos().x, layerNum: this.getMasterPos().layerNum + 1, z: this.getMasterPos().z })
+            this.boxArr[5].setPos({ x: this.getMasterPos().x + 1, layerNum: this.getMasterPos().layerNum + 1, z: this.getMasterPos().z })
+            this.boxArr[6].setPos({ x: this.getMasterPos().x, layerNum: this.getMasterPos().layerNum + 1, z: this.getMasterPos().z + 1 })
+            this.boxArr[7].setPos({ x: this.getMasterPos().x + 1, layerNum: this.getMasterPos().layerNum + 1, z: this.getMasterPos().z + 1 })
+        }
+
         if (this.peiceType == 1) {
             if (this.roationXZ == 0) {
                 //tPeice
@@ -243,14 +256,6 @@ class peice {
                 this.boxArr[3].setPos({ x: this.getMasterPos().x, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z - 3 })
             }
         }
-
-
-
-
-
-
-
-
     }
 
     getDimensions() {
