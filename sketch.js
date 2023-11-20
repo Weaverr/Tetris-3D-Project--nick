@@ -144,6 +144,15 @@ function keyPressed() {
       peiceQueue[queuePointer].setPos({ x: oldPos.x, layerNum: oldPos.layerNum, z: oldPos.z + 1 })
     }
   }
+  if (keyCode == '80') {
+    //p
+    gameState = "pause"
+  }
+
+  if (keyCode == '37') {
+    //p
+    peiceQueue[queuePointer].rotate("left")
+  }
   //console.log(event)
 }
 // how to break code: ands and ors, i j k, -1, ==

@@ -55,7 +55,9 @@ class peice {
         this.peiceType = peiceType
         this.color = color;
         this.fill = fill;
-        this.updatePos()
+        this.roationXZ = 0
+        this.peiceInitialise()
+
     }
 
     show() {
@@ -73,12 +75,12 @@ class peice {
     getMasterPos() {
         return (this.boxArr[0].getPos())
     }
-    getAllPos(){
+    getAllPos() {
         let allPos = []
         for (let i = 0; i < this.boxArr.length; i++) {
             allPos[i] = this.boxArr[i].getPos()
         }
-        return(allPos)
+        return (allPos)
     }
 
     setPos(masterLocation) {
@@ -86,7 +88,18 @@ class peice {
         this.updatePos()
     }
 
-    updatePos() {
+    rotate() {
+        if (!this.peiceType == 0) {
+            this.roationXZ++
+            if (this.roationXZ >= 4) {
+                this.roationXZ = 0
+            }
+            console.log(this.roationXZ)
+            this.updatePos()
+        }
+
+    }
+    peiceInitialise() {
         if (this.peiceType == 0) {
             //2x2box
             //peicetype left as number so it can be randomised
@@ -123,6 +136,34 @@ class peice {
             this.boxArr[2] = new boxHandler({ x: this.masterLocation.x + 2, layerNum: this.masterLocation.layerNum, z: this.masterLocation.z }, this.color, this.fill);
             this.boxArr[3] = new boxHandler({ x: this.masterLocation.x + 3, layerNum: this.masterLocation.layerNum, z: this.masterLocation.z }, this.color, this.fill);
         }
+    }
+
+    updatePos() {
+        
+        if (this.peiceType == 1 && this.roationXZ == 1) {
+            //tPeice
+            //peicetype left as number so it can be randomised
+            this.boxArr[1].setPos({ x: this.getMasterPos().x, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z + 1 })
+            this.boxArr[2].setPos({ x: this.getMasterPos().x, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z + 2 })
+            this.boxArr[3].setPos({ x: this.getMasterPos().x + 1, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z + 1 })
+        }
+        if (this.peiceType == 1 && this.roationXZ == 2) {
+            //tPeice
+            //peicetype left as number so it can be randomised
+            this.boxArr[1].setPos({ x: this.getMasterPos().x, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z + 1 })
+            this.boxArr[2].setPos({ x: this.getMasterPos().x, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z + 2 })
+            this.boxArr[3].setPos({ x: this.getMasterPos().x + 1, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z + 1 })
+        }
+        if (this.peiceType == 1 && this.roationXZ == 3) {
+            //tPeice
+            //peicetype left as number so it can be randomised
+            this.boxArr[1].setPos({ x: this.getMasterPos().x, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z + 1 })
+            this.boxArr[2].setPos({ x: this.getMasterPos().x, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z + 2 })
+            this.boxArr[3].setPos({ x: this.getMasterPos().x + 1, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z + 1 })
+        }
+
+
+        
 
     }
 
