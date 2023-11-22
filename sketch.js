@@ -30,7 +30,8 @@ let Gravity = () => {
 
 function peiceDropLogic() {
   if (gameState == "play") {
-    if ((!(peiceQueue[queuePointer].getMasterPos().layerNum < 0)) && !(collisionDetection())) {
+    console.log(dropAllowed())
+    if (dropAllowed() && collisionDetection()) {
       peiceQueue[queuePointer].drop()
     } else {
       peiceGeneration()
@@ -38,11 +39,21 @@ function peiceDropLogic() {
   }
 }
 
+function dropAllowed() {
+  let fallingPeicePos = peiceQueue[queuePointer].getAllPos()
+  for (let i = 0; i < fallingPeicePos.length; i++) {
+    if ((fallingPeicePos[i].layerNum < 0)) {
+      return false
+    }
+  }
+  return true
+}
+
 function peiceGeneration() {
   //generate new peicee
   queuePointer++
-  peiceQueue[queuePointer] = new peice(Math.round(Math.random() * 4), { x: 0, layerNum: 0, z: 0, }, { r: (Math.round(Math.random() * 255)), g: (Math.round(Math.random() * 255)), b: (Math.round(Math.random() * 255)) }, { r: (Math.round(Math.random() * 255)), g: (Math.round(Math.random() * 255)), b: (Math.round(Math.random() * 255)) })
-  //peiceQueue[queuePointer] = new peice(4, { x: 0, layerNum: 0, z: 0, }, { r: (Math.round(Math.random() * 255)), g: (Math.round(Math.random() * 255)), b: (Math.round(Math.random() * 255)) }, { r: (Math.round(Math.random() * 255)), g: (Math.round(Math.random() * 255)), b: (Math.round(Math.random() * 255)) })
+  //peiceQueue[queuePointer] = new peice(Math.round(Math.random() * 4), { x: 0, layerNum: 0, z: 0, }, { r: (Math.round(Math.random() * 255)), g: (Math.round(Math.random() * 255)), b: (Math.round(Math.random() * 255)) }, { r: (Math.round(Math.random() * 255)), g: (Math.round(Math.random() * 255)), b: (Math.round(Math.random() * 255)) })
+  peiceQueue[queuePointer] = new peice(1, { x: 0, layerNum: 0, z: 0, }, { r: (Math.round(Math.random() * 255)), g: (Math.round(Math.random() * 255)), b: (Math.round(Math.random() * 255)) }, { r: (Math.round(Math.random() * 255)), g: (Math.round(Math.random() * 255)), b: (Math.round(Math.random() * 255)) })
   do {
     let xRandom
     let zRandom
@@ -68,16 +79,17 @@ function collisionDetection() {
             if (peiceMoveBoxPos[k].layerNum >= 25) {
               gameState = "over"
             }
-            return true
+            return false
           }
         }
       }
     }
   }
-  return false
+  return true
 }
 
 function bounds() {
+  //validation used in writeup
   let activePeice = peiceQueue[queuePointer].getAllPos()
   for (let i = 0; i < activePeice.length; i++) {
     if (activePeice[i].x > 9 || activePeice[i].x < 0) {
@@ -120,7 +132,7 @@ function keyPressed() {
     //w
     let oldPos = peiceQueue[queuePointer].getMasterPos()
     peiceQueue[queuePointer].setPos({ x: oldPos.x + 1, layerNum: oldPos.layerNum, z: oldPos.z })
-    if (bounds()) {
+    if (bounds() && collisionDetection()) {
       peiceQueue[queuePointer].setPos({ x: oldPos.x, layerNum: oldPos.layerNum, z: oldPos.z })
     }
   }
@@ -128,7 +140,7 @@ function keyPressed() {
     //s
     let oldPos = peiceQueue[queuePointer].getMasterPos()
     peiceQueue[queuePointer].setPos({ x: oldPos.x - 1, layerNum: oldPos.layerNum, z: oldPos.z })
-    if (bounds()) {
+    if (bounds() && collisionDetection()) {
       peiceQueue[queuePointer].setPos({ x: oldPos.x, layerNum: oldPos.layerNum, z: oldPos.z })
     }
   }
@@ -136,7 +148,7 @@ function keyPressed() {
     //a
     let oldPos = peiceQueue[queuePointer].getMasterPos()
     peiceQueue[queuePointer].setPos({ x: oldPos.x, layerNum: oldPos.layerNum, z: oldPos.z - 1 })
-    if (bounds()) {
+    if (bounds() && collisionDetection()) {
       peiceQueue[queuePointer].setPos({ x: oldPos.x, layerNum: oldPos.layerNum, z: oldPos.z })
     }
   }
@@ -145,7 +157,7 @@ function keyPressed() {
 
     let oldPos = peiceQueue[queuePointer].getMasterPos()
     peiceQueue[queuePointer].setPos({ x: oldPos.x, layerNum: oldPos.layerNum, z: oldPos.z + 1 })
-    if (bounds()) {
+    if (bounds() && collisionDetection()) {
       peiceQueue[queuePointer].setPos({ x: oldPos.x, layerNum: oldPos.layerNum, z: oldPos.z })
     }
   }
@@ -158,16 +170,31 @@ function keyPressed() {
     }
   }
   if (keyCode == '37') {
-    //p
+    //Left arrow key
     peiceQueue[queuePointer].rotateL()
-    if (bounds()) {
+    if (bounds() && collisionDetection()) {
       peiceQueue[queuePointer].rotateR()
     }
   }
   if (keyCode == '39') {
+    //Right arrow key
     peiceQueue[queuePointer].rotateR()
-    if (bounds()) {
+    if (bounds() && collisionDetection()) {
       peiceQueue[queuePointer].rotateL()
+    }
+  }
+  if (keyCode == '38') {
+    //up arrow key
+    peiceQueue[queuePointer].rotateU()
+    if (bounds() && collisionDetection()) {
+      peiceQueue[queuePointer].rotateD()
+    }
+  }
+  if (keyCode == '40') {
+    //down arrow key
+    peiceQueue[queuePointer].rotateD()
+    if (bounds() && collisionDetection()) {
+      peiceQueue[queuePointer].rotateU()
     }
   }
 }
