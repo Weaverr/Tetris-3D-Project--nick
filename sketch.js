@@ -30,22 +30,26 @@ let Gravity = () => {
 }
 
 function peiceDropLogic() {
-  if ((!(peiceQueue[queuePointer].getMasterPos().layerNum < 0)) && !(collisionDetection()) && gameState == "play") {
-    peiceQueue[queuePointer].drop()
-  } else {
-    //generate new peicee
-    queuePointer++
-    peiceQueue[queuePointer] = new peice(Math.round(Math.random() * 3), { x: 0, layerNum: 30, z: 0, }, { r: (Math.round(Math.random() * 255)), g: (Math.round(Math.random() * 255)), b: (Math.round(Math.random() * 255)) }, { r: (Math.round(Math.random() * 255)), g: (Math.round(Math.random() * 255)), b: (Math.round(Math.random() * 255)) })
-    let xRandom
-    let zRandom
-    do {
-      xRandom = (Math.round(Math.random() * 8))
-    } while (xRandom >= (9 - peiceQueue[queuePointer].getDimensions.x))
-    do {
-      zRandom = (Math.round(Math.random() * 8))
-    } while (zRandom >= (9 - peiceQueue[queuePointer].getDimensions.z))
-    peiceQueue[queuePointer].setPos({ x: xRandom, layerNum: 30, z: zRandom })
+  if (gameState == "play") {
+    if ((!(peiceQueue[queuePointer].getMasterPos().layerNum < 0)) && !(collisionDetection())) {
+      peiceQueue[queuePointer].drop()
+    } else {
+      //generate new peicee
+      queuePointer++
+      peiceQueue[queuePointer] = new peice(Math.round(Math.random() * 3), { x: 0, layerNum: 30, z: 0, }, { r: (Math.round(Math.random() * 255)), g: (Math.round(Math.random() * 255)), b: (Math.round(Math.random() * 255)) }, { r: (Math.round(Math.random() * 255)), g: (Math.round(Math.random() * 255)), b: (Math.round(Math.random() * 255)) })
+      do {
+        let xRandom
+        let zRandom
+        xRandom = (Math.round(Math.random() * 8))
+        zRandom = (Math.round(Math.random() * 8))
+        peiceQueue[queuePointer].setPos({ x: xRandom, layerNum: 30, z: zRandom })
+        //!bounds() was a error that can be written up
+      } while (bounds())
+
+    }
   }
+
+
 }
 
 function collisionDetection() {
@@ -67,6 +71,19 @@ function collisionDetection() {
           }
         }
       }
+    }
+  }
+  return false
+}
+
+function bounds() {
+  let activePeice = peiceQueue[queuePointer].getAllPos()
+  for (let i = 0; i < activePeice.length; i++) {
+    if (activePeice[i].x > 9 || activePeice[i].x < 0) {
+      return true
+    }
+    if (activePeice[i].z > 9 || activePeice[i].z < 0) {
+      return true
     }
   }
   return false
@@ -101,41 +118,56 @@ function keyPressed() {
   if (keyCode == '87') {
     //w
     let oldPos = peiceQueue[queuePointer].getMasterPos()
-    if (!(oldPos.x >= (9 - (peiceQueue[queuePointer].getDimensions().x - 1)))) {
-      peiceQueue[queuePointer].setPos({ x: oldPos.x + 1, layerNum: oldPos.layerNum, z: oldPos.z })
+    peiceQueue[queuePointer].setPos({ x: oldPos.x + 1, layerNum: oldPos.layerNum, z: oldPos.z })
+    if (bounds()) {
+      peiceQueue[queuePointer].setPos({ x: oldPos.x, layerNum: oldPos.layerNum, z: oldPos.z })
     }
   }
   if (keyCode == '83') {
     //s
     let oldPos = peiceQueue[queuePointer].getMasterPos()
-    if (!(oldPos.x <= 0)) {
-      peiceQueue[queuePointer].setPos({ x: oldPos.x - 1, layerNum: oldPos.layerNum, z: oldPos.z })
+    peiceQueue[queuePointer].setPos({ x: oldPos.x - 1, layerNum: oldPos.layerNum, z: oldPos.z })
+    if (bounds()) {
+      peiceQueue[queuePointer].setPos({ x: oldPos.x, layerNum: oldPos.layerNum, z: oldPos.z })
     }
   }
   if (keyCode == '65') {
     //a
     let oldPos = peiceQueue[queuePointer].getMasterPos()
-    if (!(oldPos.z <= 0)) {
-      peiceQueue[queuePointer].setPos({ x: oldPos.x, layerNum: oldPos.layerNum, z: oldPos.z - 1 })
+    peiceQueue[queuePointer].setPos({ x: oldPos.x, layerNum: oldPos.layerNum, z: oldPos.z - 1 })
+    if (bounds()) {
+      peiceQueue[queuePointer].setPos({ x: oldPos.x, layerNum: oldPos.layerNum, z: oldPos.z })
     }
   }
   if (keyCode == '68') {
     //d
+
     let oldPos = peiceQueue[queuePointer].getMasterPos()
-    if (!(oldPos.z >= (9 - (peiceQueue[queuePointer].getDimensions().z - 1)))) {
-      peiceQueue[queuePointer].setPos({ x: oldPos.x, layerNum: oldPos.layerNum, z: oldPos.z + 1 })
+    peiceQueue[queuePointer].setPos({ x: oldPos.x, layerNum: oldPos.layerNum, z: oldPos.z + 1 })
+    if (bounds()) {
+      peiceQueue[queuePointer].setPos({ x: oldPos.x, layerNum: oldPos.layerNum, z: oldPos.z })
     }
   }
   if (keyCode == '80') {
     //p
-    gameState = "pause"
+    if (gameState == "pause") {
+      gameState = "play"
+    } else {
+      gameState = "pause"
+    }
+
   }
   if (keyCode == '37') {
     //p
     peiceQueue[queuePointer].rotateL()
+    if (bounds()){
+      peiceQueue[queuePointer].rotateR()
+    }
   }
   if (keyCode == '39') {
     peiceQueue[queuePointer].rotateR()
+    if (bounds()){
+      peiceQueue[queuePointer].rotateL()
+    }
   }
 }
-// how to break code: ands and ors, i j k, -1, ==

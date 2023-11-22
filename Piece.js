@@ -209,18 +209,4 @@ class peice {
             }
         }
     }
-    getDimensions() {
-        if (this.peiceType == 0) {
-            return ({ x: 2, y: 2, z: 2 })
-        }
-        if (this.peiceType == 1) {
-            return ({ x: 3, y: 1, z: 2 })
-        }
-        if (this.peiceType == 2) {
-            return ({ x: 3, y: 1, z: 2 })
-        }
-        if (this.peiceType == 3) {
-            return ({ x: 4, y: 1, z: 1 })
-        }
-    }
 }
