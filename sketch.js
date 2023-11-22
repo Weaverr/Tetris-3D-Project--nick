@@ -3,8 +3,8 @@ let myTetrisgridL;
 let myTetrisgridR;
 let myTetrisgridF;
 let timer = 1000;
-let peiceQueue
-let queuePointer = 0
+let peiceQueue = []
+let queuePointer = -1
 let gameState = "play"
 //game state is a good way to to menus and pause and shit
 //i will set it to "over" when the game is over
@@ -21,8 +21,7 @@ function setup() {
   myTetrisgridL = new Tetrisgrid(100, 300, 0, 50, -155, 1, 0, 90, 255, { r: 0, g: 0, b: 0 });
   myTetrisgridR = new Tetrisgrid(100, 300, 0, 0, -155, -50, 0, 0, 255, { r: 0, g: 0, b: 0 });
   myTetrisgridF = new Tetrisgrid(100, 100, 0, 0, -5, 0, 90, 0, 255, { r: 0, g: 0, b: 0 });
-  box1 = new peice(Math.round(Math.random() * 3), { x: 5, layerNum: 30, z: 5, }, { r: 0, g: 0, b: 255 }, { r: 255, g: 255, b: 255 })
-  peiceQueue = [box1]
+  peiceGeneration()
 }
 
 let Gravity = () => {
@@ -34,22 +33,24 @@ function peiceDropLogic() {
     if ((!(peiceQueue[queuePointer].getMasterPos().layerNum < 0)) && !(collisionDetection())) {
       peiceQueue[queuePointer].drop()
     } else {
-      //generate new peicee
-      queuePointer++
-      peiceQueue[queuePointer] = new peice(Math.round(Math.random() * 3), { x: 0, layerNum: 30, z: 0, }, { r: (Math.round(Math.random() * 255)), g: (Math.round(Math.random() * 255)), b: (Math.round(Math.random() * 255)) }, { r: (Math.round(Math.random() * 255)), g: (Math.round(Math.random() * 255)), b: (Math.round(Math.random() * 255)) })
-      do {
-        let xRandom
-        let zRandom
-        xRandom = (Math.round(Math.random() * 8))
-        zRandom = (Math.round(Math.random() * 8))
-        peiceQueue[queuePointer].setPos({ x: xRandom, layerNum: 30, z: zRandom })
-        //!bounds() was a error that can be written up
-      } while (bounds())
-
+      peiceGeneration()
     }
   }
+}
 
-
+function peiceGeneration() {
+  //generate new peicee
+  queuePointer++
+  peiceQueue[queuePointer] = new peice(Math.round(Math.random() * 4), { x: 0, layerNum: 0, z: 0, }, { r: (Math.round(Math.random() * 255)), g: (Math.round(Math.random() * 255)), b: (Math.round(Math.random() * 255)) }, { r: (Math.round(Math.random() * 255)), g: (Math.round(Math.random() * 255)), b: (Math.round(Math.random() * 255)) })
+  //peiceQueue[queuePointer] = new peice(4, { x: 0, layerNum: 0, z: 0, }, { r: (Math.round(Math.random() * 255)), g: (Math.round(Math.random() * 255)), b: (Math.round(Math.random() * 255)) }, { r: (Math.round(Math.random() * 255)), g: (Math.round(Math.random() * 255)), b: (Math.round(Math.random() * 255)) })
+  do {
+    let xRandom
+    let zRandom
+    xRandom = (Math.round(Math.random() * 8))
+    zRandom = (Math.round(Math.random() * 8))
+    peiceQueue[queuePointer].setPos({ x: xRandom, layerNum: 28, z: zRandom })
+    //!bounds() was a error that can be written up
+  } while (bounds())
 }
 
 function collisionDetection() {
@@ -155,18 +156,17 @@ function keyPressed() {
     } else {
       gameState = "pause"
     }
-
   }
   if (keyCode == '37') {
     //p
     peiceQueue[queuePointer].rotateL()
-    if (bounds()){
+    if (bounds()) {
       peiceQueue[queuePointer].rotateR()
     }
   }
   if (keyCode == '39') {
     peiceQueue[queuePointer].rotateR()
-    if (bounds()){
+    if (bounds()) {
       peiceQueue[queuePointer].rotateL()
     }
   }

@@ -76,7 +76,6 @@ class peice {
             if (this.roationXZ >= 4) {
                 this.roationXZ = 0
             }
-            console.log(this.roationXZ)
             this.updatePos()
         }
 
@@ -87,43 +86,23 @@ class peice {
             if (this.roationXZ < 0) {
                 this.roationXZ = 3
             }
-            console.log(this.roationXZ)
             this.updatePos()
         }
     }
     peiceInitialise() {
+        this.boxArr[0] = new boxHandler({ x: this.masterLocation.x, layerNum: this.masterLocation.layerNum, z: this.masterLocation.z }, this.color, this.fill);
         if (this.peiceType == 0) {
             //2x2box
-            this.boxArr[0] = new boxHandler({ x: this.masterLocation.x, layerNum: this.masterLocation.layerNum, z: this.masterLocation.z }, this.color, this.fill);
-            this.boxArr[1] = new boxHandler({ x: this.masterLocation.x + 1, layerNum: this.masterLocation.layerNum, z: this.masterLocation.z }, this.color, this.fill);
-            this.boxArr[2] = new boxHandler({ x: this.masterLocation.x, layerNum: this.masterLocation.layerNum, z: this.masterLocation.z + 1 }, this.color, this.fill);
-            this.boxArr[3] = new boxHandler({ x: this.masterLocation.x + 1, layerNum: this.masterLocation.layerNum, z: this.masterLocation.z + 1 }, this.color, this.fill);
-            this.boxArr[4] = new boxHandler({ x: this.masterLocation.x, layerNum: this.masterLocation.layerNum + 1, z: this.masterLocation.z }, this.color, this.fill);
-            this.boxArr[5] = new boxHandler({ x: this.masterLocation.x + 1, layerNum: this.masterLocation.layerNum + 1, z: this.masterLocation.z }, this.color, this.fill);
-            this.boxArr[6] = new boxHandler({ x: this.masterLocation.x, layerNum: this.masterLocation.layerNum + 1, z: this.masterLocation.z + 1 }, this.color, this.fill);
-            this.boxArr[7] = new boxHandler({ x: this.masterLocation.x + 1, layerNum: this.masterLocation.layerNum + 1, z: this.masterLocation.z + 1 }, this.color, this.fill);
+            for (let i = 1; i < 8; i++) {
+                this.boxArr[i] = new boxHandler({ x: this.masterLocation.x, layerNum: this.masterLocation.layerNum, z: this.masterLocation.z }, this.color, this.fill);
+            }
         }
-        if (this.peiceType == 1) {
-            //tPeice
-            this.boxArr[0] = new boxHandler({ x: this.masterLocation.x, layerNum: this.masterLocation.layerNum, z: this.masterLocation.z }, this.color, this.fill);
-            this.boxArr[1] = new boxHandler({ x: this.masterLocation.x + 1, layerNum: this.masterLocation.layerNum, z: this.masterLocation.z }, this.color, this.fill);
-            this.boxArr[2] = new boxHandler({ x: this.masterLocation.x + 2, layerNum: this.masterLocation.layerNum, z: this.masterLocation.z }, this.color, this.fill);
-            this.boxArr[3] = new boxHandler({ x: this.masterLocation.x + 1, layerNum: this.masterLocation.layerNum, z: this.masterLocation.z + 1 }, this.color, this.fill);
+        if (this.peiceType >= 1) {
+            for (let i = 1; i < 4; i++) {
+                this.boxArr[i] = new boxHandler({ x: this.masterLocation.x, layerNum: this.masterLocation.layerNum, z: this.masterLocation.z }, this.color, this.fill);
+            }
         }
-        if (this.peiceType == 2) {
-            //lPeice
-            this.boxArr[0] = new boxHandler({ x: this.masterLocation.x, layerNum: this.masterLocation.layerNum, z: this.masterLocation.z }, this.color, this.fill);
-            this.boxArr[1] = new boxHandler({ x: this.masterLocation.x + 1, layerNum: this.masterLocation.layerNum, z: this.masterLocation.z }, this.color, this.fill);
-            this.boxArr[2] = new boxHandler({ x: this.masterLocation.x + 2, layerNum: this.masterLocation.layerNum, z: this.masterLocation.z }, this.color, this.fill);
-            this.boxArr[3] = new boxHandler({ x: this.masterLocation.x, layerNum: this.masterLocation.layerNum, z: this.masterLocation.z + 1 }, this.color, this.fill);
-        }
-        if (this.peiceType == 3) {
-            //line
-            this.boxArr[0] = new boxHandler({ x: this.masterLocation.x, layerNum: this.masterLocation.layerNum, z: this.masterLocation.z }, this.color, this.fill);
-            this.boxArr[1] = new boxHandler({ x: this.masterLocation.x + 1, layerNum: this.masterLocation.layerNum, z: this.masterLocation.z }, this.color, this.fill);
-            this.boxArr[2] = new boxHandler({ x: this.masterLocation.x + 2, layerNum: this.masterLocation.layerNum, z: this.masterLocation.z }, this.color, this.fill);
-            this.boxArr[3] = new boxHandler({ x: this.masterLocation.x + 3, layerNum: this.masterLocation.layerNum, z: this.masterLocation.z }, this.color, this.fill);
-        }
+        this.updatePos()
     }
 
     updatePos() {
@@ -137,7 +116,6 @@ class peice {
             this.boxArr[6].setPos({ x: this.getMasterPos().x, layerNum: this.getMasterPos().layerNum + 1, z: this.getMasterPos().z + 1 })
             this.boxArr[7].setPos({ x: this.getMasterPos().x + 1, layerNum: this.getMasterPos().layerNum + 1, z: this.getMasterPos().z + 1 })
         }
-
         if (this.peiceType == 1) {
             //tPeice
             if (this.roationXZ == 0) {
@@ -208,5 +186,30 @@ class peice {
                 this.boxArr[3].setPos({ x: this.getMasterPos().x, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z - 3 })
             }
         }
+
+        if (this.peiceType == 4) {
+            //line
+            if (this.roationXZ == 0) {
+                this.boxArr[1].setPos({ x: this.getMasterPos().x + 1, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z })
+                this.boxArr[2].setPos({ x: this.getMasterPos().x + 1, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z + 1 })
+                this.boxArr[3].setPos({ x: this.getMasterPos().x + 2, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z + 1 })
+            }
+            if (this.roationXZ == 1) {
+                this.boxArr[1].setPos({ x: this.getMasterPos().x + 1, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z })
+                this.boxArr[2].setPos({ x: this.getMasterPos().x + 1, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z - 1 })
+                this.boxArr[3].setPos({ x: this.getMasterPos().x + 2, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z - 1 })
+            }
+            if (this.roationXZ == 2) {
+                this.boxArr[1].setPos({ x: this.getMasterPos().x - 1, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z })
+                this.boxArr[2].setPos({ x: this.getMasterPos().x - 1, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z - 1 })
+                this.boxArr[3].setPos({ x: this.getMasterPos().x - 2, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z - 1 })
+            }
+            if (this.roationXZ == 3) {
+                this.boxArr[1].setPos({ x: this.getMasterPos().x - 1, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z })
+                this.boxArr[2].setPos({ x: this.getMasterPos().x - 1, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z + 1 })
+                this.boxArr[3].setPos({ x: this.getMasterPos().x - 2, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z + 1 })
+            }
+        }
+
     }
 }
