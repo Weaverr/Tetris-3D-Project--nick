@@ -52,15 +52,15 @@ function dropAllowed() {
 function peiceGeneration() {
   //generate new peicee
   queuePointer++
-  //peiceQueue[queuePointer] = new peice(Math.round(Math.random() * 4), { x: 0, layerNum: 0, z: 0, }, { r: (Math.round(Math.random() * 255)), g: (Math.round(Math.random() * 255)), b: (Math.round(Math.random() * 255)) }, { r: (Math.round(Math.random() * 255)), g: (Math.round(Math.random() * 255)), b: (Math.round(Math.random() * 255)) })
-  peiceQueue[queuePointer] = new peice(4, { x: 5, layerNum: 28, z: 5, }, { r: (Math.round(Math.random() * 255)), g: (Math.round(Math.random() * 255)), b: (Math.round(Math.random() * 255)) }, { r: (Math.round(Math.random() * 255)), g: (Math.round(Math.random() * 255)), b: (Math.round(Math.random() * 255)) })
-  //add into writeup and how needed in middle
+  peiceQueue[queuePointer] = new peice(Math.round(Math.random() * 4), { x: 0, layerNum: 0, z: 0, }, { r: (Math.round(Math.random() * 255)), g: (Math.round(Math.random() * 255)), b: (Math.round(Math.random() * 255)) }, { r: (Math.round(Math.random() * 255)), g: (Math.round(Math.random() * 255)), b: (Math.round(Math.random() * 255)) })
+  //peiceQueue[queuePointer] = new peice(4, { x: 5, layerNum: 28, z: 5, }, { r: (Math.round(Math.random() * 255)), g: (Math.round(Math.random() * 255)), b: (Math.round(Math.random() * 255)) }, { r: (Math.round(Math.random() * 255)), g: (Math.round(Math.random() * 255)), b: (Math.round(Math.random() * 255)) })
+  //add into writeup and how needed in middle also comment out random
   do {
     let xRandom
     let zRandom
     xRandom = (Math.round(Math.random() * 8))
     zRandom = (Math.round(Math.random() * 8))
-    //peiceQueue[queuePointer].setPos({ x: xRandom, layerNum: 28, z: zRandom })
+    peiceQueue[queuePointer].setPos({ x: xRandom, layerNum: 28, z: zRandom })
     //!bounds() was a error that can be written up
   } while (bounds())
 }

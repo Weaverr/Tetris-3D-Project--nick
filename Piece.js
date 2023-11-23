@@ -79,7 +79,7 @@ class peice {
             }
             this.updatePos()
         }
-        console.log("RotationL " + this.rotationL + " RotationXY " + this.roationXZ)
+        //console.log("RotationL " + this.rotationL + " RotationXY " + this.roationXZ)
     }
     rotateR() {
         if (!this.peiceType == 0) {
@@ -89,7 +89,7 @@ class peice {
             }
             this.updatePos()
         }
-        console.log("RotationL " + this.rotationL + " RotationXY " + this.roationXZ)
+        //console.log("RotationL " + this.rotationL + " RotationXY " + this.roationXZ)
     }
     rotateU() {
         if (!this.peiceType == 0) {
@@ -99,7 +99,7 @@ class peice {
             }
             this.updatePos()
         }
-        console.log("RotationL " + this.rotationL + " RotationXY " + this.roationXZ)
+        //console.log("RotationL " + this.rotationL + " RotationXY " + this.roationXZ)
     }
     rotateD() {
         if (!this.peiceType == 0) {
@@ -109,7 +109,7 @@ class peice {
             }
             this.updatePos()
         }
-        console.log("RotationL " + this.rotationL + " RotationXY " + this.roationXZ)
+        //console.log("RotationL " + this.rotationL + " RotationXY " + this.roationXZ)
     }
     peiceInitialise() {
         this.boxArr[0] = new boxHandler({ x: this.masterLocation.x, layerNum: this.masterLocation.layerNum, z: this.masterLocation.z }, this.color, this.fill);
