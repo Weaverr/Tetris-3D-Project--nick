@@ -58,10 +58,21 @@ function peiceGeneration() {
   do {
     let xRandom
     let zRandom
+    let lRotRandom
+    let xyRotRandom
     xRandom = (Math.round(Math.random() * 8))
     zRandom = (Math.round(Math.random() * 8))
+    lRotRandom =(Math.round(Math.random() * 3))
+    xyRotRandom =(Math.round(Math.random() * 3))
     peiceQueue[queuePointer].setPos({ x: xRandom, layerNum: 28, z: zRandom })
-    //!bounds() was a error that can be written up
+    for (let i = 0; i < lRotRandom; i++) {
+      peiceQueue[queuePointer].rotateL()
+    }
+    for (let i = 0; i < xyRotRandom; i++) {
+      peiceQueue[queuePointer].rotateU()
+    }
+    //!bounds() was a error t
+    //that can be written up
   } while (bounds())
 }
 

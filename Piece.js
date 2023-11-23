@@ -128,6 +128,7 @@ class peice {
     }
 
     updatePos() {
+        //get chatGPT to condense functions
         if (this.peiceType == 0) {
             //2x2 box
             this.boxArr[1].setPos({ x: this.getMasterPos().x + 1, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z })
