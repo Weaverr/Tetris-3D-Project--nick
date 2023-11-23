@@ -138,6 +138,7 @@ class peice {
             this.boxArr[6].setPos({ x: this.getMasterPos().x, layerNum: this.getMasterPos().layerNum + 1, z: this.getMasterPos().z + 1 })
             this.boxArr[7].setPos({ x: this.getMasterPos().x + 1, layerNum: this.getMasterPos().layerNum + 1, z: this.getMasterPos().z + 1 })
         }
+
         if (this.peiceType == 1) {
             //tPeice
             if (this.roationXZ == 0) {
@@ -181,7 +182,7 @@ class peice {
                 if (this.rotationL == 3) {
                     this.boxArr[1].setPos({ x: this.getMasterPos().x, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z + 1 })
                     this.boxArr[2].setPos({ x: this.getMasterPos().x, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z - 1 })
-                    this.boxArr[3].setPos({ x: this.getMasterPos().x , layerNum: this.getMasterPos().layerNum - 1, z: this.getMasterPos().z })
+                    this.boxArr[3].setPos({ x: this.getMasterPos().x, layerNum: this.getMasterPos().layerNum - 1, z: this.getMasterPos().z })
                 }
             }
             if (this.roationXZ == 2) {
@@ -234,30 +235,74 @@ class peice {
 
 
 
-
         if (this.peiceType == 2) {
             //lPeice
             if (this.roationXZ == 0) {
-                this.boxArr[1].setPos({ x: this.getMasterPos().x + 1, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z })
-                this.boxArr[2].setPos({ x: this.getMasterPos().x + 2, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z })
-                this.boxArr[3].setPos({ x: this.getMasterPos().x, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z + 1 })
+                if (this.rotationL == 0) {
+                    this.boxArr[1].setPos({ x: this.getMasterPos().x + 1, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z })
+                    this.boxArr[2].setPos({ x: this.getMasterPos().x + 2, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z })
+                    this.boxArr[3].setPos({ x: this.getMasterPos().x, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z + 1 })
+                }
+                if (this.rotationL == 1) {
+
+                }
+                if (this.rotationL == 2) {
+
+                }
+                if (this.rotationL == 3) {
+
+                }
             }
             if (this.roationXZ == 1) {
-                this.boxArr[1].setPos({ x: this.getMasterPos().x, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z + 1 })
-                this.boxArr[2].setPos({ x: this.getMasterPos().x, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z + 2 })
-                this.boxArr[3].setPos({ x: this.getMasterPos().x + 1, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z })
+                if (this.rotationL == 0) {
+                    this.boxArr[1].setPos({ x: this.getMasterPos().x, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z + 1 })
+                    this.boxArr[2].setPos({ x: this.getMasterPos().x, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z + 2 })
+                    this.boxArr[3].setPos({ x: this.getMasterPos().x + 1, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z })
+                }
+                if (this.rotationL == 1) {
+
+                }
+                if (this.rotationL == 2) {
+
+                }
+                if (this.rotationL == 3) {
+
+                }
             }
             if (this.roationXZ == 2) {
-                this.boxArr[1].setPos({ x: this.getMasterPos().x + 1, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z })
-                this.boxArr[2].setPos({ x: this.getMasterPos().x + 2, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z })
-                this.boxArr[3].setPos({ x: this.getMasterPos().x, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z - 1 })
+                if (this.rotationL == 0) {
+                    this.boxArr[1].setPos({ x: this.getMasterPos().x + 1, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z })
+                    this.boxArr[2].setPos({ x: this.getMasterPos().x + 2, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z })
+                    this.boxArr[3].setPos({ x: this.getMasterPos().x, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z - 1 })
+                }
+                if (this.rotationL == 1) {
+
+                }
+                if (this.rotationL == 2) {
+
+                }
+                if (this.rotationL == 3) {
+
+                }
             }
             if (this.roationXZ == 3) {
-                this.boxArr[1].setPos({ x: this.getMasterPos().x, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z + 1 })
-                this.boxArr[2].setPos({ x: this.getMasterPos().x, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z + 2 })
-                this.boxArr[3].setPos({ x: this.getMasterPos().x - 1, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z })
+                if (this.rotationL == 0) {
+                    this.boxArr[1].setPos({ x: this.getMasterPos().x, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z + 1 })
+                    this.boxArr[2].setPos({ x: this.getMasterPos().x, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z + 2 })
+                    this.boxArr[3].setPos({ x: this.getMasterPos().x - 1, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z })
+                }
+                if (this.rotationL == 1) {
+
+                }
+                if (this.rotationL == 2) {
+
+                }
+                if (this.rotationL == 3) {
+
+                }
             }
         }
+
 
 
 
@@ -269,24 +314,68 @@ class peice {
         if (this.peiceType == 3) {
             //line
             if (this.roationXZ == 0) {
-                this.boxArr[1].setPos({ x: this.getMasterPos().x + 1, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z })
-                this.boxArr[2].setPos({ x: this.getMasterPos().x + 2, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z })
-                this.boxArr[3].setPos({ x: this.getMasterPos().x + 3, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z })
+                if (this.rotationL == 0) {
+                    this.boxArr[1].setPos({ x: this.getMasterPos().x + 1, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z })
+                    this.boxArr[2].setPos({ x: this.getMasterPos().x + 2, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z })
+                    this.boxArr[3].setPos({ x: this.getMasterPos().x + 3, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z })
+                }
+                if (this.rotationL == 1) {
+
+                }
+                if (this.rotationL == 2) {
+
+                }
+                if (this.rotationL == 3) {
+
+                }
             }
             if (this.roationXZ == 1) {
-                this.boxArr[1].setPos({ x: this.getMasterPos().x, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z + 1 })
-                this.boxArr[2].setPos({ x: this.getMasterPos().x, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z + 2 })
-                this.boxArr[3].setPos({ x: this.getMasterPos().x, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z + 3 })
+                if (this.rotationL == 0) {
+                    this.boxArr[1].setPos({ x: this.getMasterPos().x, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z + 1 })
+                    this.boxArr[2].setPos({ x: this.getMasterPos().x, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z + 2 })
+                    this.boxArr[3].setPos({ x: this.getMasterPos().x, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z + 3 })
+                }
+                if (this.rotationL == 1) {
+
+                }
+                if (this.rotationL == 2) {
+
+                }
+                if (this.rotationL == 3) {
+
+                }
             }
             if (this.roationXZ == 2) {
-                this.boxArr[1].setPos({ x: this.getMasterPos().x - 1, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z })
-                this.boxArr[2].setPos({ x: this.getMasterPos().x - 2, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z })
-                this.boxArr[3].setPos({ x: this.getMasterPos().x - 3, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z })
+                if (this.rotationL == 0) {
+                    this.boxArr[1].setPos({ x: this.getMasterPos().x - 1, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z })
+                    this.boxArr[2].setPos({ x: this.getMasterPos().x - 2, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z })
+                    this.boxArr[3].setPos({ x: this.getMasterPos().x - 3, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z })
+                }
+                if (this.rotationL == 1) {
+
+                }
+                if (this.rotationL == 2) {
+
+                }
+                if (this.rotationL == 3) {
+
+                }
             }
             if (this.roationXZ == 3) {
-                this.boxArr[1].setPos({ x: this.getMasterPos().x, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z - 1 })
-                this.boxArr[2].setPos({ x: this.getMasterPos().x, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z - 2 })
-                this.boxArr[3].setPos({ x: this.getMasterPos().x, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z - 3 })
+                if (this.rotationL == 0) {
+                    this.boxArr[1].setPos({ x: this.getMasterPos().x, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z - 1 })
+                    this.boxArr[2].setPos({ x: this.getMasterPos().x, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z - 2 })
+                    this.boxArr[3].setPos({ x: this.getMasterPos().x, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z - 3 })
+                }
+                if (this.rotationL == 1) {
+
+                }
+                if (this.rotationL == 2) {
+
+                }
+                if (this.rotationL == 3) {
+
+                }
             }
         }
 
@@ -297,26 +386,70 @@ class peice {
 
 
         if (this.peiceType == 4) {
-            //line
+            //zpeice
             if (this.roationXZ == 0) {
-                this.boxArr[1].setPos({ x: this.getMasterPos().x + 1, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z })
-                this.boxArr[2].setPos({ x: this.getMasterPos().x + 1, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z + 1 })
-                this.boxArr[3].setPos({ x: this.getMasterPos().x + 2, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z + 1 })
+                if (this.rotationL == 0) {
+                    this.boxArr[1].setPos({ x: this.getMasterPos().x + 1, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z })
+                    this.boxArr[2].setPos({ x: this.getMasterPos().x + 1, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z + 1 })
+                    this.boxArr[3].setPos({ x: this.getMasterPos().x + 2, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z + 1 })
+                }
+                if (this.rotationL == 1) {
+
+                }
+                if (this.rotationL == 2) {
+
+                }
+                if (this.rotationL == 3) {
+
+                }
             }
             if (this.roationXZ == 1) {
-                this.boxArr[1].setPos({ x: this.getMasterPos().x + 1, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z })
-                this.boxArr[2].setPos({ x: this.getMasterPos().x + 1, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z - 1 })
-                this.boxArr[3].setPos({ x: this.getMasterPos().x + 2, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z - 1 })
+                if (this.rotationL == 0) {
+                    this.boxArr[1].setPos({ x: this.getMasterPos().x + 1, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z })
+                    this.boxArr[2].setPos({ x: this.getMasterPos().x + 1, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z - 1 })
+                    this.boxArr[3].setPos({ x: this.getMasterPos().x + 2, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z - 1 })
+                }
+                if (this.rotationL == 1) {
+
+                }
+                if (this.rotationL == 2) {
+
+                }
+                if (this.rotationL == 3) {
+
+                }
             }
             if (this.roationXZ == 2) {
-                this.boxArr[1].setPos({ x: this.getMasterPos().x - 1, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z })
-                this.boxArr[2].setPos({ x: this.getMasterPos().x - 1, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z - 1 })
-                this.boxArr[3].setPos({ x: this.getMasterPos().x - 2, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z - 1 })
+                if (this.rotationL == 0) {
+                    this.boxArr[1].setPos({ x: this.getMasterPos().x - 1, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z })
+                    this.boxArr[2].setPos({ x: this.getMasterPos().x - 1, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z - 1 })
+                    this.boxArr[3].setPos({ x: this.getMasterPos().x - 2, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z - 1 })
+                }
+                if (this.rotationL == 1) {
+
+                }
+                if (this.rotationL == 2) {
+
+                }
+                if (this.rotationL == 3) {
+
+                }
             }
             if (this.roationXZ == 3) {
-                this.boxArr[1].setPos({ x: this.getMasterPos().x - 1, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z })
-                this.boxArr[2].setPos({ x: this.getMasterPos().x - 1, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z + 1 })
-                this.boxArr[3].setPos({ x: this.getMasterPos().x - 2, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z + 1 })
+                if (this.rotationL == 0) {
+                    this.boxArr[1].setPos({ x: this.getMasterPos().x - 1, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z })
+                    this.boxArr[2].setPos({ x: this.getMasterPos().x - 1, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z + 1 })
+                    this.boxArr[3].setPos({ x: this.getMasterPos().x - 2, layerNum: this.getMasterPos().layerNum, z: this.getMasterPos().z + 1 })
+                }
+                if (this.rotationL == 1) {
+
+                }
+                if (this.rotationL == 2) {
+
+                }
+                if (this.rotationL == 3) {
+
+                }
             }
         }
 
