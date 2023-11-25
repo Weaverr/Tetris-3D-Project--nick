@@ -6,6 +6,9 @@ let timer = 1000;
 let peiceQueue = []
 let queuePointer = -1
 let gameState = "play"
+let cam1, cam2, cam3, cam4;
+let currentcamera;
+let isDropButtonPressed = false;
 //game state is a good way to to menus and pause and shit
 //i will set it to "over" when the game is over
 //"play" when the game is playing
@@ -21,6 +24,41 @@ function setup() {
   myTetrisgridL = new Tetrisgrid(100, 300, 0, 50, -155, 1, 0, 90, 255, { r: 0, g: 0, b: 0 });
   myTetrisgridR = new Tetrisgrid(100, 300, 0, 0, -155, -50, 0, 0, 255, { r: 0, g: 0, b: 0 });
   myTetrisgridF = new Tetrisgrid(100, 100, 0, 0, -5, 0, 90, 0, 255, { r: 0, g: 0, b: 0 });
+  cam1 = new devCam(-250, -300, 250, 0, -100, 0);
+  cam2 = new devCam(-300, 0, 0, 0, 0, 0)
+  cam3 = new devCam(0, 0, 300, 0, 0, 0)
+  cam4 = new devCam(1, -500, 0, 0, 0, 0)
+  currentcamera = cam1;
+
+  // Create buttons with labels
+  upButton = createButton('Up');
+  downButton = createButton('Down');
+  leftButton = createButton('Left');
+  rightButton = createButton('Right');
+  dropButton = createButton('Drop')
+
+  // Create button sizes
+  upButton.size(80, 40);
+  downButton.size(80, 40);
+  leftButton.size(80, 40);
+  rightButton.size(80, 40);
+  dropButton.size(500, 100)
+
+  // Position the buttons
+  upButton.position(100, windowHeight /2 - 10);
+  downButton.position(100, windowHeight /2 + 50);
+  leftButton.position(10, windowHeight /2 + 20);
+  rightButton.position(190, windowHeight /2 + 20);
+  dropButton.position(windowWidth /2 - 250, windowHeight /2 + 250)
+
+  // Add event listeners to the buttons
+  upButton.mousePressed(moveUp);
+  downButton.mousePressed(moveDown);
+  leftButton.mousePressed(moveLeft);
+  rightButton.mousePressed(moveRight);
+  dropButton.mousePressed(startDropping);
+  dropButton.mouseReleased(stopDropping);
+
   peiceGeneration()
 }
 
@@ -114,6 +152,14 @@ function bounds() {
   return false
 }
 
+function startDropping() {
+  isDropButtonPressed = true;
+}
+
+function stopDropping() {
+  isDropButtonPressed = false;
+}
+
 function draw() {
   inputs();
   processes();
@@ -122,7 +168,9 @@ function draw() {
 
 function inputs() {
   if (keyIsDown(32)) { peiceDropLogic() }
-}
+
+  if (isDropButtonPressed) { peiceDropLogic() }
+  }
 
 function processes() {
   if (gameState == "over") { console.log("Game Over") }
@@ -140,7 +188,7 @@ function outputs() {
 }
 
 function keyPressed() {
-  if (keyCode == '87') {
+  if (keyCode == '68') {
     //w
     let oldPos = peiceQueue[queuePointer].getMasterPos()
     peiceQueue[queuePointer].setPos({ x: oldPos.x + 1, layerNum: oldPos.layerNum, z: oldPos.z })
@@ -148,7 +196,7 @@ function keyPressed() {
       peiceQueue[queuePointer].setPos({ x: oldPos.x, layerNum: oldPos.layerNum, z: oldPos.z })
     }
   }
-  if (keyCode == '83') {
+  if (keyCode == '65') {
     //s
     let oldPos = peiceQueue[queuePointer].getMasterPos()
     peiceQueue[queuePointer].setPos({ x: oldPos.x - 1, layerNum: oldPos.layerNum, z: oldPos.z })
@@ -156,7 +204,7 @@ function keyPressed() {
       peiceQueue[queuePointer].setPos({ x: oldPos.x, layerNum: oldPos.layerNum, z: oldPos.z })
     }
   }
-  if (keyCode == '65') {
+  if (keyCode == '87') {
     //a
     let oldPos = peiceQueue[queuePointer].getMasterPos()
     peiceQueue[queuePointer].setPos({ x: oldPos.x, layerNum: oldPos.layerNum, z: oldPos.z - 1 })
@@ -164,9 +212,8 @@ function keyPressed() {
       peiceQueue[queuePointer].setPos({ x: oldPos.x, layerNum: oldPos.layerNum, z: oldPos.z })
     }
   }
-  if (keyCode == '68') {
+  if (keyCode == '83') {
     //d
-
     let oldPos = peiceQueue[queuePointer].getMasterPos()
     peiceQueue[queuePointer].setPos({ x: oldPos.x, layerNum: oldPos.layerNum, z: oldPos.z + 1 })
     if (bounds() && collisionDetection()) {
@@ -209,4 +256,51 @@ function keyPressed() {
       peiceQueue[queuePointer].rotateU()
     }
   }
+}
+
+function keyTyped() {
+  if (key == '1') {
+    currentcamera = cam1;
+  }
+  else if (key == '2') {
+    currentcamera = cam2;
+  }
+  else if (key == '3') {
+    currentcamera = cam3;
+  }
+  else if (key == '4') {
+    currentcamera = cam4;
+  }
+}
+
+function moveRight() {
+  let oldPos = peiceQueue[queuePointer].getMasterPos()
+    peiceQueue[queuePointer].setPos({ x: oldPos.x + 1, layerNum: oldPos.layerNum, z: oldPos.z })
+    if (bounds() && collisionDetection()) {
+      peiceQueue[queuePointer].setPos({ x: oldPos.x, layerNum: oldPos.layerNum, z: oldPos.z })
+    } // Adjust the value as needed
+}
+
+function moveLeft() {
+  let oldPos = peiceQueue[queuePointer].getMasterPos()
+  peiceQueue[queuePointer].setPos({ x: oldPos.x - 1, layerNum: oldPos.layerNum, z: oldPos.z })
+  if (bounds() && collisionDetection()) {
+    peiceQueue[queuePointer].setPos({ x: oldPos.x, layerNum: oldPos.layerNum, z: oldPos.z })
+  } // 
+}
+
+function moveUp() {
+  let oldPos = peiceQueue[queuePointer].getMasterPos()
+  peiceQueue[queuePointer].setPos({ x: oldPos.x, layerNum: oldPos.layerNum, z: oldPos.z - 1 })
+  if (bounds() && collisionDetection()) {
+    peiceQueue[queuePointer].setPos({ x: oldPos.x, layerNum: oldPos.layerNum, z: oldPos.z })
+  }
+}
+
+function moveDown() {
+  let oldPos = peiceQueue[queuePointer].getMasterPos()
+    peiceQueue[queuePointer].setPos({ x: oldPos.x, layerNum: oldPos.layerNum, z: oldPos.z + 1 })
+    if (bounds() && collisionDetection()) {
+      peiceQueue[queuePointer].setPos({ x: oldPos.x, layerNum: oldPos.layerNum, z: oldPos.z })
+    } 
 }

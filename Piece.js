@@ -38,11 +38,11 @@ function valueCoordinator(value) {
 
 
 class peice {
-    constructor(peiceType, masterLocation, color, fill) {
+    constructor(peiceType, masterLocation, colour, fill) {
         this.boxArr = []
         this.masterLocation = masterLocation
         this.peiceType = peiceType
-        this.color = color;
+        this.colour = colour;
         this.fill = fill;
         this.roationXZ = 0
         this.rotationL = 0
@@ -112,16 +112,16 @@ class peice {
         //console.log("RotationL " + this.rotationL + " RotationXY " + this.roationXZ)
     }
     peiceInitialise() {
-        this.boxArr[0] = new boxHandler({ x: this.masterLocation.x, layerNum: this.masterLocation.layerNum, z: this.masterLocation.z }, this.color, this.fill);
+        this.boxArr[0] = new boxHandler({ x: this.masterLocation.x, layerNum: this.masterLocation.layerNum, z: this.masterLocation.z }, this.colour, this.fill);
         if (this.peiceType == 0) {
             //2x2box
             for (let i = 1; i < 8; i++) {
-                this.boxArr[i] = new boxHandler({ x: this.masterLocation.x, layerNum: this.masterLocation.layerNum, z: this.masterLocation.z }, this.color, this.fill);
+                this.boxArr[i] = new boxHandler({ x: this.masterLocation.x, layerNum: this.masterLocation.layerNum, z: this.masterLocation.z }, this.colour, this.fill);
             }
         }
         if (this.peiceType >= 1) {
             for (let i = 1; i < 4; i++) {
-                this.boxArr[i] = new boxHandler({ x: this.masterLocation.x, layerNum: this.masterLocation.layerNum, z: this.masterLocation.z }, this.color, this.fill);
+                this.boxArr[i] = new boxHandler({ x: this.masterLocation.x, layerNum: this.masterLocation.layerNum, z: this.masterLocation.z }, this.colour, this.fill);
             }
         }
         this.updatePos()
