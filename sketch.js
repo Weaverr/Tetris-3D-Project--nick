@@ -1,29 +1,37 @@
 // Variables
-let myTetrisgridL;
-let myTetrisgridR;
-let myTetrisgridF;
-let timer = 1000;
-let peiceQueue = []
-let queuePointer = -1
-let gameState = "play"
+let mytetrisGridL;
+let mytetrisGridR;
+let mytetrisGridF;
+let timer = 500;
+let pieceQueue = [];
+let queuePointer = -1;
+let gameProgression = "play";
 let cam1, cam2, cam3, cam4;
 let currentcamera;
 let isDropButtonPressed = false;
-//game state is a good way to to menus and pause and shit
-//i will set it to "over" when the game is over
-//"play" when the game is playing
-//change the gameState to something else as its the same in my program and looks bait
 
-
+// The setup function is called once at the beginning to initialize the canvas and settings.
 function setup() {
-  createCanvas(windowWidth, windowHeight, WEBGL);
-  rectMode(CENTER);
-  angleMode(DEGREES);
-  currentcamera = new devCam(-250, -300, 250, 0, -100, 0);
+  createCanvas(windowWidth, windowHeight, WEBGL); // Create a canvas using the entire window's dimensions in WEBGL mode
+  rectMode(CENTER); // Configure rectangle drawing mode to be centered
+  angleMode(DEGREES); // Utilize degrees for angle measurements
+
+  // Create new camera objectS and set its initial position and target
+  currentcamera = new devCam(-250, -300, 250, 0, -100, 0); 
+
+  // Invokes the Gravity function at regular intervals defined by the timer variable which is set to 500
   setInterval(() => Gravity(), timer);
-  myTetrisgridL = new Tetrisgrid(100, 300, 0, 50, -155, 1, 0, 90, 255, { r: 0, g: 0, b: 0 });
-  myTetrisgridR = new Tetrisgrid(100, 300, 0, 0, -155, -50, 0, 0, 255, { r: 0, g: 0, b: 0 });
-  myTetrisgridF = new Tetrisgrid(100, 100, 0, 0, -5, 0, 90, 0, 255, { r: 0, g: 0, b: 0 });
+
+  // Create the left Tetris grid object with specified properties
+  mytetrisGridL = new tetrisGrid(100, 300, 0, 50, -155, 1, 0, 90, 255, { r: 0, g: 0, b: 0 });
+
+  // Create the right Tetris grid object with specified properties
+  mytetrisGridR = new tetrisGrid(100, 300, 0, 0, -155, -50, 0, 0, 255, { r: 0, g: 0, b: 0 });
+
+  // Create the floor of the tetris grid with specified properties
+  mytetrisGridF = new tetrisGrid(100, 100, 0, 0, -5, 0, 90, 0, 255, { r: 0, g: 0, b: 0 });
+
+  // Create multiple camera objects and instantiate camera variables 
   cam1 = new devCam(-250, -300, 250, 0, -100, 0);
   cam2 = new devCam(-300, 0, 0, 0, 0, 0)
   cam3 = new devCam(0, 0, 300, 0, 0, 0)
@@ -49,7 +57,7 @@ function setup() {
   downButton.position(100, windowHeight /2 + 50);
   leftButton.position(10, windowHeight /2 + 20);
   rightButton.position(190, windowHeight /2 + 20);
-  dropButton.position(windowWidth /2 - 250, windowHeight /2 + 250)
+  dropButton.position(windowWidth /2 - 250, windowHeight /2 + 260)
 
   // Add event listeners to the buttons
   upButton.mousePressed(moveUp);
@@ -59,248 +67,378 @@ function setup() {
   dropButton.mousePressed(startDropping);
   dropButton.mouseReleased(stopDropping);
 
-  peiceGeneration()
+  // Calls the pieceGeneration() function to generate the first piece
+  pieceGeneration()
 }
 
+// Define the Gravity function using arrow function syntax
 let Gravity = () => {
-  peiceDropLogic()
+  // Calls the pieceDropLogic function
+  pieceDropLogic();
 }
 
-function peiceDropLogic() {
-  if (gameState == "play") {
-    console.log(dropAllowed())
+// Function to manage the logic for dropping a game piece
+function pieceDropLogic() {
+  // Check if the game is currently in the 'play' state
+  if (gameProgression == "play") {
+    // Log the result of the dropAllowed function for debugging
+    console.log(dropAllowed());
+
+    // Check if dropping the piece is allowed and if there is no collision
     if (dropAllowed() && collisionDetection()) {
-      peiceQueue[queuePointer].drop()
+      // If dropping is allowed and there is no collision, drop the piece down by one layer
+      pieceQueue[queuePointer].drop();
     } else {
-      peiceGeneration()
+      // If dropping is not allowed or there is a collision, generate a new piece
+      pieceGeneration();
     }
   }
 }
 
+// Function to check if dropping of a game piece is allowed
 function dropAllowed() {
-  let fallingPeicePos = peiceQueue[queuePointer].getAllPos()
-  for (let i = 0; i < fallingPeicePos.length; i++) {
-    if ((fallingPeicePos[i].layerNum < 0)) {
-      return false
+  // Retrieve the positions of the current falling piece from the queue
+  let fallingPiecePos = pieceQueue[queuePointer].getAllPos();
+
+  // Loop through each position of the falling piece
+  for (let i = 0; i < fallingPiecePos.length; i++) {
+    // Check if the layer number of the current position is less than 0
+    if ((fallingPiecePos[i].layerNum < 0)) {
+      // If any position is below the floor of the tetris grid, return false
+      return false;
     }
   }
-  return true
+
+  // If none of the positions are below the teris grid floor, return true
+  return true;
 }
 
-function peiceGeneration() {
-  //generate new peicee
+// Function to generate a new game piece
+function pieceGeneration() {
+  // Move to the next piece in the queue
   queuePointer++
-  peiceQueue[queuePointer] = new peice(Math.round(Math.random() * 4), { x: 0, layerNum: 0, z: 0, }, { r: (Math.round(Math.random() * 255)), g: (Math.round(Math.random() * 255)), b: (Math.round(Math.random() * 255)) }, { r: (Math.round(Math.random() * 255)), g: (Math.round(Math.random() * 255)), b: (Math.round(Math.random() * 255)) })
-  //peiceQueue[queuePointer] = new peice(4, { x: 5, layerNum: 28, z: 5, }, { r: (Math.round(Math.random() * 255)), g: (Math.round(Math.random() * 255)), b: (Math.round(Math.random() * 255)) }, { r: (Math.round(Math.random() * 255)), g: (Math.round(Math.random() * 255)), b: (Math.round(Math.random() * 255)) })
-  //add into writeup and how needed in middle also comment out random
+
+  // Generate a new piece with random type and color
+  pieceQueue[queuePointer] = new peice(Math.round(Math.random() * 4), { x: 0, layerNum: 0, z: 0, }, 
+  { r: (Math.round(Math.random() * 255)), g: (Math.round(Math.random() * 255)), 
+    b: (Math.round(Math.random() * 255)) }, { r: (Math.round(Math.random() * 255)), 
+    g: (Math.round(Math.random() * 255)), b: (Math.round(Math.random() * 255)) });
+
   do {
+    // Create random rotation and positional coordinate variables
     let xRandom
     let zRandom
     let lRotRandom
     let xyRotRandom
+
+    // Generate a random x position, ensuring it's within the grid boundaries
     xRandom = (Math.round(Math.random() * 8))
+
+    // Generate a random z position, also within grid boundaries
     zRandom = (Math.round(Math.random() * 8))
+
+    // Generate a random amount of L-rotations (0 to 3)
     lRotRandom =(Math.round(Math.random() * 3))
+    
+    // Generate a random amount of XY-rotations (0 to 3)
     xyRotRandom =(Math.round(Math.random() * 3))
-    peiceQueue[queuePointer].setPos({ x: xRandom, layerNum: 28, z: zRandom })
+
+    // Set the position of the new piece based on the random x and z coordinates
+    pieceQueue[queuePointer].setPos({ x: xRandom, layerNum: 28, z: zRandom })
+
+    // Apply L-rotations to the piece
     for (let i = 0; i < lRotRandom; i++) {
-      peiceQueue[queuePointer].rotateL()
+      pieceQueue[queuePointer].rotateL()
     }
+
+    // Apply XY-rotations to the piece
     for (let i = 0; i < xyRotRandom; i++) {
-      peiceQueue[queuePointer].rotateU()
+      pieceQueue[queuePointer].rotateU()
     }
-    //!bounds() was a error t
-    //that can be written up
+
   } while (bounds())
 }
 
 function collisionDetection() {
-  let peiceMoveBoxPos = peiceQueue[queuePointer].getAllPos()
-  for (let i = 0; i < (peiceQueue.length - 1); i++) {
-    //Iterates through the peice queue without the active peice
-    let peiceBoxPos = peiceQueue[i].getAllPos()
-    for (let j = 0; j < peiceBoxPos.length; j++) {
-      //Iterates through the current peice in queue      
-      for (let k = 0; k < peiceMoveBoxPos.length; k++) {
-        //Iterates through the current moving peice
-        if (peiceBoxPos[j].layerNum == (peiceMoveBoxPos[k].layerNum - 1)) {
-          if (peiceBoxPos[j].x == peiceMoveBoxPos[k].x && peiceBoxPos[j].z == peiceMoveBoxPos[k].z) {
-            //compares between current peice in queue and current moving peice and returns true if they will collide
-            if (peiceMoveBoxPos[k].layerNum >= 25) {
-              gameState = "over"
+  // Get the position of the current moving piece from the queue
+  let pieceMoveBoxPos = pieceQueue[queuePointer].getAllPos();
+
+  // Iterate through the entire piece queue, excluding the active piece
+  for (let i = 0; i < (pieceQueue.length - 1); i++) {
+    // Retrieve the positions of the current piece in the queue
+    let pieceBoxPos = pieceQueue[i].getAllPos();
+
+    for (let j = 0; j < pieceBoxPos.length; j++) {
+      // Iterate through each position of the current piece in the queue
+      
+      for (let k = 0; k < pieceMoveBoxPos.length; k++) {
+        // Iterate through each position of the current moving piece
+
+        // Check if the layer number of the queue piece is directly below the moving piece
+        if (pieceBoxPos[j].layerNum == (pieceMoveBoxPos[k].layerNum - 1)) {
+          // Check if the x and z coordinates of the queue piece and moving piece match
+          if (pieceBoxPos[j].x == pieceMoveBoxPos[k].x && pieceBoxPos[j].z == pieceMoveBoxPos[k].z) {
+            // If they match, it means the pieces will collide. Perform further actions based on this
+            if (pieceMoveBoxPos[k].layerNum >= 25) {
+              // If the moving piece is at or above a certain layer, change the game state to "over"
+              gameProgression = "over";
             }
-            return false
+            // Return false indicating a collision will occur
+            return false;
           }
         }
       }
     }
   }
-  return true
+  
+  // If no collision is detected, return true
+  return true;
 }
 
 function bounds() {
-  //validation used in writeup
-  let activePeice = peiceQueue[queuePointer].getAllPos()
-  for (let i = 0; i < activePeice.length; i++) {
-    if (activePeice[i].x > 9 || activePeice[i].x < 0) {
-      return true
+  // Retrieve the positions of the currently active piece
+  let activePiece = pieceQueue[queuePointer].getAllPos();
+
+  // Loop through each position in the active piece
+  for (let i = 0; i < activePiece.length; i++) {
+    // Check if the x-coordinate of the current position is out of bounds (greater than 9 or less than 0)
+    if (activePiece[i].x > 9 || activePiece[i].x < 0) {
+      // Return true if the piece is out of bounds on the x-axis
+      return true;
     }
-    if (activePeice[i].z > 9 || activePeice[i].z < 0) {
-      return true
+    // Check if the z-coordinate of the current position is out of bounds (greater than 9 or less than 0)
+    if (activePiece[i].z > 9 || activePiece[i].z < 0) {
+      // Return true if the piece is out of bounds on the z-axis
+      return true;
     }
   }
-  return false
+
+  // Return false if the piece is within bounds on both axes
+  return false;
 }
 
+// Function to handle the start of the dropping action when the drop button is pressed
 function startDropping() {
   isDropButtonPressed = true;
 }
 
+// Function to handle the end of the dropping action when the drop button is released
 function stopDropping() {
   isDropButtonPressed = false;
 }
 
+// Main draw function that is continuously executed in the p5.js game loop
 function draw() {
   inputs();
   processes();
   outputs();
 }
 
+// The inputs function handles Inputs from the user
 function inputs() {
-  if (keyIsDown(32)) { peiceDropLogic() }
+  if (keyIsDown(32)) { pieceDropLogic() }
 
-  if (isDropButtonPressed) { peiceDropLogic() }
+  if (isDropButtonPressed) { pieceDropLogic() }
   }
 
+// The processes function handles data processing and calculations.
 function processes() {
-  if (gameState == "over") { console.log("Game Over") }
+  if (gameProgression == "over") { console.log("Game Over") }
 }
 
+// The outputs function handles displaying visual outputs on the canvas.
 function outputs() {
   background(255, 255, 255);
-  currentcamera.show();
+  currentcamera.show(); // Displays the camera
   stroke(255);
-  for (let i = 0; i < peiceQueue.length; i++) { peiceQueue[i].show() }
+  for (let i = 0; i < pieceQueue.length; i++) { pieceQueue[i].show() }
   stroke('lime')
-  myTetrisgridL.show();
-  myTetrisgridR.show();
-  myTetrisgridF.show();
+  mytetrisGridL.show(); // Display the left Tetris grid element
+  mytetrisGridR.show(); // Display the right Tetris grid element
+  mytetrisGridF.show(); // Display the front Tetris grid element
 }
 
 function keyPressed() {
-  if (keyCode == '68') {
-    //w
-    let oldPos = peiceQueue[queuePointer].getMasterPos()
-    peiceQueue[queuePointer].setPos({ x: oldPos.x + 1, layerNum: oldPos.layerNum, z: oldPos.z })
+  // Check if the 'D' key is pressed
+  if (keyCode == '68' && gameProgression == "play") {
+    // Store the current position of the active piece
+    let oldPos = pieceQueue[queuePointer].getMasterPos();
+    // Move the piece one unit to the right
+    pieceQueue[queuePointer].setPos({ x: oldPos.x + 1, layerNum: oldPos.layerNum, z: oldPos.z });
+    // Check if the new position is within bounds and not colliding
     if (bounds() && collisionDetection()) {
-      peiceQueue[queuePointer].setPos({ x: oldPos.x, layerNum: oldPos.layerNum, z: oldPos.z })
+      // If out of bounds or colliding, revert to the old position
+      pieceQueue[queuePointer].setPos({ x: oldPos.x, layerNum: oldPos.layerNum, z: oldPos.z });
     }
   }
-  if (keyCode == '65') {
-    //s
-    let oldPos = peiceQueue[queuePointer].getMasterPos()
-    peiceQueue[queuePointer].setPos({ x: oldPos.x - 1, layerNum: oldPos.layerNum, z: oldPos.z })
+
+  // Check if the 'A' key is pressed
+  if (keyCode == '65' && gameProgression == "play") {
+    // Store the current position of the active piece
+    let oldPos = pieceQueue[queuePointer].getMasterPos();
+    // Move the piece one unit to the left
+    pieceQueue[queuePointer].setPos({ x: oldPos.x - 1, layerNum: oldPos.layerNum, z: oldPos.z });
+    // Check if the new position is within bounds and not colliding
     if (bounds() && collisionDetection()) {
-      peiceQueue[queuePointer].setPos({ x: oldPos.x, layerNum: oldPos.layerNum, z: oldPos.z })
+      // If out of bounds or colliding, revert to the old position
+      pieceQueue[queuePointer].setPos({ x: oldPos.x, layerNum: oldPos.layerNum, z: oldPos.z });
     }
   }
-  if (keyCode == '87') {
-    //a
-    let oldPos = peiceQueue[queuePointer].getMasterPos()
-    peiceQueue[queuePointer].setPos({ x: oldPos.x, layerNum: oldPos.layerNum, z: oldPos.z - 1 })
+
+  // Check if the 'W' key is pressed
+  if (keyCode == '87' && gameProgression == "play") {
+    // Store the current position of the active piece
+    let oldPos = pieceQueue[queuePointer].getMasterPos();
+    // Move the piece one unit downwards
+    pieceQueue[queuePointer].setPos({ x: oldPos.x, layerNum: oldPos.layerNum, z: oldPos.z - 1 });
+    // Check if the new position is within bounds and not colliding
     if (bounds() && collisionDetection()) {
-      peiceQueue[queuePointer].setPos({ x: oldPos.x, layerNum: oldPos.layerNum, z: oldPos.z })
+      // If out of bounds or colliding, revert to the old position
+      pieceQueue[queuePointer].setPos({ x: oldPos.x, layerNum: oldPos.layerNum, z: oldPos.z });
     }
   }
-  if (keyCode == '83') {
-    //d
-    let oldPos = peiceQueue[queuePointer].getMasterPos()
-    peiceQueue[queuePointer].setPos({ x: oldPos.x, layerNum: oldPos.layerNum, z: oldPos.z + 1 })
+
+  // Check if the 'S' key is pressed
+  if (keyCode == '83' && gameProgression == "play") {
+    // Store the current position of the active piece
+    let oldPos = pieceQueue[queuePointer].getMasterPos();
+    // Move the piece one unit upwards
+    pieceQueue[queuePointer].setPos({ x: oldPos.x, layerNum: oldPos.layerNum, z: oldPos.z + 1 });
+    // Check if the new position is within bounds and not colliding
     if (bounds() && collisionDetection()) {
-      peiceQueue[queuePointer].setPos({ x: oldPos.x, layerNum: oldPos.layerNum, z: oldPos.z })
+      // If out of bounds or colliding, revert to the old position
+      pieceQueue[queuePointer].setPos({ x: oldPos.x, layerNum: oldPos.layerNum, z: oldPos.z });
     }
   }
+
+  // Check if the 'P' key is pressed
   if (keyCode == '80') {
-    //p
-    if (gameState == "pause") {
-      gameState = "play"
-    } else {
-      gameState = "pause"
+  // The keyCode '80' corresponds to the 'P' key
+
+  // Toggle the game progression state between "pause" and "play"
+    if (gameProgression == "pause") {
+    // If the game is currently paused, change the state to "play"
+    gameProgression = "play"
+  }else {
+    // If the game is currently playing, change the state to "pause"
+    gameProgression = "pause"
     }
   }
-  if (keyCode == '37') {
-    //Left arrow key
-    peiceQueue[queuePointer].rotateL()
-    if (bounds() && collisionDetection()) {
-      peiceQueue[queuePointer].rotateR()
-    }
-  }
-  if (keyCode == '39') {
-    //Right arrow key
-    peiceQueue[queuePointer].rotateR()
-    if (bounds() && collisionDetection()) {
-      peiceQueue[queuePointer].rotateL()
-    }
-  }
-  if (keyCode == '38') {
-    //up arrow key
-    peiceQueue[queuePointer].rotateU()
-    if (bounds() && collisionDetection()) {
-      peiceQueue[queuePointer].rotateD()
-    }
-  }
-  if (keyCode == '40') {
-    //down arrow key
-    peiceQueue[queuePointer].rotateD()
-    if (bounds() && collisionDetection()) {
-      peiceQueue[queuePointer].rotateU()
-    }
+
+// Check if the Left Arrow key is pressed
+if (keyCode == '37' && gameProgression == "play") {
+  // The keyCode '37' corresponds to the Left Arrow key
+
+  // Rotate the current active piece in the queue to the left
+  pieceQueue[queuePointer].rotateL();
+
+  // Check if the piece is out of bounds or colliding after rotation
+  if (bounds() && collisionDetection()) {
+    // If the piece is out of bounds or colliding, rotate it back to the right to undo the action
+    pieceQueue[queuePointer].rotateR();
   }
 }
 
+// Check if the Right Arrow key is pressed
+if (keyCode == '39' && gameProgression == "play") {
+  // The keyCode '39' corresponds to the Right Arrow key
+
+  // Rotate the current active piece in the queue to the right
+  pieceQueue[queuePointer].rotateR();
+
+  // Check if the piece is out of bounds or colliding after rotation
+  if (bounds() && collisionDetection()) {
+    // If the piece is out of bounds or colliding, rotate it back to the left to undo the action
+    pieceQueue[queuePointer].rotateL();
+  }
+}
+
+// Check if the Up Arrow key is pressed
+if (keyCode == '38' && gameProgression == "play") {
+  // The keyCode '38' corresponds to the Up Arrow key
+
+  // Rotate the current active piece in the queue upwards
+  pieceQueue[queuePointer].rotateU();
+
+  // Check if the piece is out of bounds or colliding after rotation
+  if (bounds() && collisionDetection()) {
+    // If the piece is out of bounds or colliding, rotate it downwards to undo the action
+    pieceQueue[queuePointer].rotateD();
+  }
+}
+
+// Check if the Down Arrow key is pressed
+if (keyCode == '40' && gameProgression == "play") {
+  // The keyCode '40' corresponds to the Down Arrow key
+
+  // Rotate the current active piece in the queue downwards
+  pieceQueue[queuePointer].rotateD();
+
+  // Check if the piece is out of bounds or colliding after rotation
+  if (bounds() && collisionDetection()) {
+    // If the piece is out of bounds or colliding, rotate it upwards to undo the action
+    pieceQueue[queuePointer].rotateU();
+  }
+}
+}
+
+// Function to move a game piece to the right
+function moveRight() {
+  // Store the current position of the piece
+  let oldPos = pieceQueue[queuePointer].getMasterPos();
+  // Set the new position to one unit right
+  pieceQueue[queuePointer].setPos({ x: oldPos.x + 1, layerNum: oldPos.layerNum, z: oldPos.z });
+  // Check if the new position is within bounds and not colliding with other pieces
+  if (bounds() && collisionDetection()) {
+    // If out of bounds or colliding, revert to the original position
+    pieceQueue[queuePointer].setPos({ x: oldPos.x, layerNum: oldPos.layerNum, z: oldPos.z });
+  } 
+}
+
+// Function to move a game piece to the left
+function moveLeft() {
+  let oldPos = pieceQueue[queuePointer].getMasterPos();
+  pieceQueue[queuePointer].setPos({ x: oldPos.x - 1, layerNum: oldPos.layerNum, z: oldPos.z });
+  if (bounds() && collisionDetection()) {
+    pieceQueue[queuePointer].setPos({ x: oldPos.x, layerNum: oldPos.layerNum, z: oldPos.z });
+  }
+}
+
+// Function to move a game piece upwards
+function moveUp() {
+  let oldPos = pieceQueue[queuePointer].getMasterPos();
+  pieceQueue[queuePointer].setPos({ x: oldPos.x, layerNum: oldPos.layerNum, z: oldPos.z - 1 });
+  if (bounds() && collisionDetection()) {
+    pieceQueue[queuePointer].setPos({ x: oldPos.x, layerNum: oldPos.layerNum, z: oldPos.z });
+  }
+}
+
+// Function to move a game piece downwards
+function moveDown() {
+  let oldPos = pieceQueue[queuePointer].getMasterPos();
+  pieceQueue[queuePointer].setPos({ x: oldPos.x, layerNum: oldPos.layerNum, z: oldPos.z + 1 });
+  if (bounds() && collisionDetection()) {
+    pieceQueue[queuePointer].setPos({ x: oldPos.x, layerNum: oldPos.layerNum, z: oldPos.z });
+  } 
+}
+
+// Function to switch between different camera views based on key input
 function keyTyped() {
+  // Switch to camera 1
   if (key == '1') {
     currentcamera = cam1;
   }
+  // Switch to camera 2
   else if (key == '2') {
     currentcamera = cam2;
   }
+  // Switch to camera 3
   else if (key == '3') {
     currentcamera = cam3;
   }
+  // Switch to camera 4
   else if (key == '4') {
     currentcamera = cam4;
   }
 }
 
-function moveRight() {
-  let oldPos = peiceQueue[queuePointer].getMasterPos()
-    peiceQueue[queuePointer].setPos({ x: oldPos.x + 1, layerNum: oldPos.layerNum, z: oldPos.z })
-    if (bounds() && collisionDetection()) {
-      peiceQueue[queuePointer].setPos({ x: oldPos.x, layerNum: oldPos.layerNum, z: oldPos.z })
-    } // Adjust the value as needed
-}
-
-function moveLeft() {
-  let oldPos = peiceQueue[queuePointer].getMasterPos()
-  peiceQueue[queuePointer].setPos({ x: oldPos.x - 1, layerNum: oldPos.layerNum, z: oldPos.z })
-  if (bounds() && collisionDetection()) {
-    peiceQueue[queuePointer].setPos({ x: oldPos.x, layerNum: oldPos.layerNum, z: oldPos.z })
-  } // 
-}
-
-function moveUp() {
-  let oldPos = peiceQueue[queuePointer].getMasterPos()
-  peiceQueue[queuePointer].setPos({ x: oldPos.x, layerNum: oldPos.layerNum, z: oldPos.z - 1 })
-  if (bounds() && collisionDetection()) {
-    peiceQueue[queuePointer].setPos({ x: oldPos.x, layerNum: oldPos.layerNum, z: oldPos.z })
-  }
-}
-
-function moveDown() {
-  let oldPos = peiceQueue[queuePointer].getMasterPos()
-    peiceQueue[queuePointer].setPos({ x: oldPos.x, layerNum: oldPos.layerNum, z: oldPos.z + 1 })
-    if (bounds() && collisionDetection()) {
-      peiceQueue[queuePointer].setPos({ x: oldPos.x, layerNum: oldPos.layerNum, z: oldPos.z })
-    } 
-}

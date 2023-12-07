@@ -1,5 +1,5 @@
 // Class to define the tetris grid
-class Tetrisgrid {
+class tetrisGrid {
   // Constructor for creating Tetris grid elements
   constructor(length, width, depth, x, y, z, rotateX, rotateY, stroke, colour) {
     this.length = length
