@@ -10,6 +10,7 @@ let cam1, cam2, cam3, cam4;
 let currentcamera;
 let isDropButtonPressed = false;
 let gameCam;
+let arial
 
 
 function preload() {
@@ -27,6 +28,17 @@ function setup() {
 
   // Create new camera objectS and set its initial position and target
   menuCam = createCamera()
+  setCamera(menuCam)
+  cam1 = createCamera()
+  cam2 = createCamera()
+  cam3 = createCamera()
+  cam4 = createCamera()
+
+  cam1.camera(-250, -300, 250, 0, -100, 0);
+  cam2.camera(-300, 0, 0, 0, 0, 0)
+  cam3.camera(0, 0, 300, 0, 0, 0)
+  cam4.camera(1, -500, 0, 0, 0, 0)
+  gameCam = cam1
 
   // Invokes the Gravity function at regular intervals defined by the timer variable which is set to 500
   setInterval(() => Gravity(), timer);
@@ -41,12 +53,6 @@ function setup() {
   mytetrisGridF = new tetrisGrid(100, 100, 0, 0, -5, 0, 90, 0, 255, { r: 0, g: 0, b: 0 });
 
   // Create multiple camera objects and instantiate camera variables 
-  cam1 = new devCam(-250, -300, 250, 0, -100, 0);
-  cam2 = new devCam(-300, 0, 0, 0, 0, 0)
-  cam3 = new devCam(0, 0, 300, 0, 0, 0)
-  cam4 = new devCam(1, -500, 0, 0, 0, 0)
-  currentcamera = menuCam;
-  gameCam = cam1
 
   // Create buttons with labels
   upButton = createButton('Up');
@@ -54,6 +60,8 @@ function setup() {
   leftButton = createButton('Left');
   rightButton = createButton('Right');
   dropButton = createButton('Drop')
+  mMenuButton = createButton('Press to play');
+  overButton = createButton('Back to main menu')
 
   // Create button sizes
   upButton.size(80, 40);
@@ -61,6 +69,8 @@ function setup() {
   leftButton.size(80, 40);
   rightButton.size(80, 40);
   dropButton.size(500, 100)
+  mMenuButton.size(400, 100)
+  overButton.size(400, 100)
 
   // Position the buttons
   upButton.position(100, windowHeight / 2 - 10);
@@ -68,6 +78,8 @@ function setup() {
   leftButton.position(10, windowHeight / 2 + 20);
   rightButton.position(190, windowHeight / 2 + 20);
   dropButton.position(windowWidth / 2 - 250, windowHeight / 2 + 260)
+  mMenuButton.position(windowWidth / 2 - 250, windowHeight / 2 + 260)
+  overButton.position(windowWidth / 2 - 250, windowHeight / 2 + 260)
 
   // Add event listeners to the buttons
   upButton.mousePressed(moveUp);
@@ -76,15 +88,27 @@ function setup() {
   rightButton.mousePressed(moveRight);
   dropButton.mousePressed(startDropping);
   dropButton.mouseReleased(stopDropping);
+  mMenuButton.mouseReleased(playGame);
+  overButton.mouseReleased(returnTomMenu);
 
   upButton.hide();
   downButton.hide()
   leftButton.hide();
   rightButton.hide();
   dropButton.hide()
+  overButton.hide()
 
   // Calls the pieceGeneration() function to generate the first piece
   pieceGeneration()
+}
+
+function playGame() {
+  gameProgression = "play"
+}
+
+function returnTomMenu() {
+  console.log("triggered")
+  gameProgression = "mMenu"
 }
 
 // Define the Gravity function using arrow function syntax
@@ -269,15 +293,16 @@ function processes() {
     leftButton.hide();
     rightButton.hide();
     dropButton.hide()
+    overButton.hide()
+    mMenuButton.hide()
   }
 }
 
 // The outputs function handles displaying visual outputs on the canvas.
 function outputs() {
-  setCamera(currentcamera)
   background(255, 255, 255)
   if (gameProgression == "play") {
-    currentcamera = gameCam;
+    setCamera(gameCam)
     stroke(255);
     for (let i = 0; i < pieceQueue.length; i++) { pieceQueue[i].show() }
     stroke('lime')
@@ -289,40 +314,54 @@ function outputs() {
     leftButton.show();
     rightButton.show();
     dropButton.show()
+    overButton.hide()
   }
   if (gameProgression == "mMenu") {
-    currentcamera = menuCam
+    setCamera(menuCam)
+    mMenuButton.show()
+    push()
+    textSize(100)
+    fill(0)
+    text("Main Menu", 0, -200)
+    pop()
     upButton.hide();
     downButton.hide()
     leftButton.hide();
     rightButton.hide();
     dropButton.hide()
-    push()
-    fill(255)
-    textSize(100)
-    text("menu", 0, 0)
-    pop()
+    overButton.hide()
   }
 
   if (gameProgression == "pause") {
-    currentcamera = menuCam
-    upButton.hide();
-    downButton.hide()
-    leftButton.hide();
-    rightButton.hide();
-    dropButton.hide()
-  }
-  if (gameProgression == "over") {
-    upButton.hide();
-    downButton.hide()
-    leftButton.hide();
-    rightButton.hide();
-    dropButton.hide()
-    currentcamera = menuCam
+    setCamera(menuCam)
     push()
     textSize(100)
-    text("Game Over", -100, -100)
+    fill(0)
+    text("Pause", 0, -200)
+    textSize(50)
+    text("Press 'p' to continue", 0, -50)
     pop()
+    upButton.hide();
+    downButton.hide()
+    leftButton.hide();
+    rightButton.hide();
+    dropButton.hide()
+    overButton.hide()
+  }
+  if (gameProgression == "over") {
+    setCamera(menuCam)
+    push()
+    textSize(100)
+    fill(0)
+    text("Game over", 0, -200)
+    pop()
+    upButton.hide();
+    downButton.hide()
+    leftButton.hide();
+    rightButton.hide();
+    dropButton.hide()
+    mMenuButton.hide()
+    overButton.show()
   }
 }
 
