@@ -5,19 +5,28 @@ let mytetrisGridF;
 let timer = 500;
 let pieceQueue = [];
 let queuePointer = -1;
-let gameProgression = "play";
+let gameProgression = "mMenu";
 let cam1, cam2, cam3, cam4;
 let currentcamera;
 let isDropButtonPressed = false;
+let gameCam;
+
+
+function preload() {
+  arial = loadFont('arial.ttf');
+}
+
 
 // The setup function is called once at the beginning to initialize the canvas and settings.
 function setup() {
   createCanvas(windowWidth, windowHeight, WEBGL); // Create a canvas using the entire window's dimensions in WEBGL mode
+  textFont(arial);
+  textAlign(CENTER, CENTER);
   rectMode(CENTER); // Configure rectangle drawing mode to be centered
   angleMode(DEGREES); // Utilize degrees for angle measurements
 
   // Create new camera objectS and set its initial position and target
-  currentcamera = new devCam(-250, -300, 250, 0, -100, 0); 
+  menuCam = createCamera()
 
   // Invokes the Gravity function at regular intervals defined by the timer variable which is set to 500
   setInterval(() => Gravity(), timer);
@@ -36,7 +45,8 @@ function setup() {
   cam2 = new devCam(-300, 0, 0, 0, 0, 0)
   cam3 = new devCam(0, 0, 300, 0, 0, 0)
   cam4 = new devCam(1, -500, 0, 0, 0, 0)
-  currentcamera = cam1;
+  currentcamera = menuCam;
+  gameCam = cam1
 
   // Create buttons with labels
   upButton = createButton('Up');
@@ -53,11 +63,11 @@ function setup() {
   dropButton.size(500, 100)
 
   // Position the buttons
-  upButton.position(100, windowHeight /2 - 10);
-  downButton.position(100, windowHeight /2 + 50);
-  leftButton.position(10, windowHeight /2 + 20);
-  rightButton.position(190, windowHeight /2 + 20);
-  dropButton.position(windowWidth /2 - 250, windowHeight /2 + 260)
+  upButton.position(100, windowHeight / 2 - 10);
+  downButton.position(100, windowHeight / 2 + 50);
+  leftButton.position(10, windowHeight / 2 + 20);
+  rightButton.position(190, windowHeight / 2 + 20);
+  dropButton.position(windowWidth / 2 - 250, windowHeight / 2 + 260)
 
   // Add event listeners to the buttons
   upButton.mousePressed(moveUp);
@@ -66,6 +76,12 @@ function setup() {
   rightButton.mousePressed(moveRight);
   dropButton.mousePressed(startDropping);
   dropButton.mouseReleased(stopDropping);
+
+  upButton.hide();
+  downButton.hide()
+  leftButton.hide();
+  rightButton.hide();
+  dropButton.hide()
 
   // Calls the pieceGeneration() function to generate the first piece
   pieceGeneration()
@@ -119,10 +135,14 @@ function pieceGeneration() {
   queuePointer++
 
   // Generate a new piece with random type and color
-  pieceQueue[queuePointer] = new peice(Math.round(Math.random() * 4), { x: 0, layerNum: 0, z: 0, }, 
-  { r: (Math.round(Math.random() * 255)), g: (Math.round(Math.random() * 255)), 
-    b: (Math.round(Math.random() * 255)) }, { r: (Math.round(Math.random() * 255)), 
-    g: (Math.round(Math.random() * 255)), b: (Math.round(Math.random() * 255)) });
+  pieceQueue[queuePointer] = new peice(Math.round(Math.random() * 4), { x: 0, layerNum: 0, z: 0, },
+    {
+      r: (Math.round(Math.random() * 255)), g: (Math.round(Math.random() * 255)),
+      b: (Math.round(Math.random() * 255))
+    }, {
+    r: (Math.round(Math.random() * 255)),
+    g: (Math.round(Math.random() * 255)), b: (Math.round(Math.random() * 255))
+  });
 
   do {
     // Create random rotation and positional coordinate variables
@@ -138,10 +158,10 @@ function pieceGeneration() {
     zRandom = (Math.round(Math.random() * 8))
 
     // Generate a random amount of L-rotations (0 to 3)
-    lRotRandom =(Math.round(Math.random() * 3))
-    
+    lRotRandom = (Math.round(Math.random() * 3))
+
     // Generate a random amount of XY-rotations (0 to 3)
-    xyRotRandom =(Math.round(Math.random() * 3))
+    xyRotRandom = (Math.round(Math.random() * 3))
 
     // Set the position of the new piece based on the random x and z coordinates
     pieceQueue[queuePointer].setPos({ x: xRandom, layerNum: 28, z: zRandom })
@@ -170,7 +190,7 @@ function collisionDetection() {
 
     for (let j = 0; j < pieceBoxPos.length; j++) {
       // Iterate through each position of the current piece in the queue
-      
+
       for (let k = 0; k < pieceMoveBoxPos.length; k++) {
         // Iterate through each position of the current moving piece
 
@@ -190,7 +210,7 @@ function collisionDetection() {
       }
     }
   }
-  
+
   // If no collision is detected, return true
   return true;
 }
@@ -239,23 +259,71 @@ function inputs() {
   if (keyIsDown(32)) { pieceDropLogic() }
 
   if (isDropButtonPressed) { pieceDropLogic() }
-  }
+}
 
 // The processes function handles data processing and calculations.
 function processes() {
-  if (gameProgression == "over") { console.log("Game Over") }
+  if (gameProgression == "play") {
+    upButton.hide();
+    downButton.hide()
+    leftButton.hide();
+    rightButton.hide();
+    dropButton.hide()
+  }
 }
 
 // The outputs function handles displaying visual outputs on the canvas.
 function outputs() {
-  background(255, 255, 255);
-  currentcamera.show(); // Displays the camera
-  stroke(255);
-  for (let i = 0; i < pieceQueue.length; i++) { pieceQueue[i].show() }
-  stroke('lime')
-  mytetrisGridL.show(); // Display the left Tetris grid element
-  mytetrisGridR.show(); // Display the right Tetris grid element
-  mytetrisGridF.show(); // Display the front Tetris grid element
+  setCamera(currentcamera)
+  background(255, 255, 255)
+  if (gameProgression == "play") {
+    currentcamera = gameCam;
+    stroke(255);
+    for (let i = 0; i < pieceQueue.length; i++) { pieceQueue[i].show() }
+    stroke('lime')
+    mytetrisGridL.show(); // Display the left Tetris grid element
+    mytetrisGridR.show(); // Display the right Tetris grid element
+    mytetrisGridF.show(); // Display the front Tetris grid element
+    upButton.show();
+    downButton.show()
+    leftButton.show();
+    rightButton.show();
+    dropButton.show()
+  }
+  if (gameProgression == "mMenu") {
+    currentcamera = menuCam
+    upButton.hide();
+    downButton.hide()
+    leftButton.hide();
+    rightButton.hide();
+    dropButton.hide()
+    push()
+    fill(255)
+    textSize(100)
+    text("menu", 0, 0)
+    pop()
+  }
+
+  if (gameProgression == "pause") {
+    currentcamera = menuCam
+    upButton.hide();
+    downButton.hide()
+    leftButton.hide();
+    rightButton.hide();
+    dropButton.hide()
+  }
+  if (gameProgression == "over") {
+    upButton.hide();
+    downButton.hide()
+    leftButton.hide();
+    rightButton.hide();
+    dropButton.hide()
+    currentcamera = menuCam
+    push()
+    textSize(100)
+    text("Game Over", -100, -100)
+    pop()
+  }
 }
 
 function keyPressed() {
@@ -313,73 +381,73 @@ function keyPressed() {
 
   // Check if the 'P' key is pressed
   if (keyCode == '80') {
-  // The keyCode '80' corresponds to the 'P' key
+    // The keyCode '80' corresponds to the 'P' key
 
-  // Toggle the game progression state between "pause" and "play"
+    // Toggle the game progression state between "pause" and "play"
     if (gameProgression == "pause") {
-    // If the game is currently paused, change the state to "play"
-    gameProgression = "play"
-  }else {
-    // If the game is currently playing, change the state to "pause"
-    gameProgression = "pause"
+      // If the game is currently paused, change the state to "play"
+      gameProgression = "play"
+    } else {
+      // If the game is currently playing, change the state to "pause"
+      gameProgression = "pause"
     }
   }
 
-// Check if the Left Arrow key is pressed
-if (keyCode == '37' && gameProgression == "play") {
-  // The keyCode '37' corresponds to the Left Arrow key
+  // Check if the Left Arrow key is pressed
+  if (keyCode == '37' && gameProgression == "play") {
+    // The keyCode '37' corresponds to the Left Arrow key
 
-  // Rotate the current active piece in the queue to the left
-  pieceQueue[queuePointer].rotateL();
-
-  // Check if the piece is out of bounds or colliding after rotation
-  if (bounds() && collisionDetection()) {
-    // If the piece is out of bounds or colliding, rotate it back to the right to undo the action
-    pieceQueue[queuePointer].rotateR();
-  }
-}
-
-// Check if the Right Arrow key is pressed
-if (keyCode == '39' && gameProgression == "play") {
-  // The keyCode '39' corresponds to the Right Arrow key
-
-  // Rotate the current active piece in the queue to the right
-  pieceQueue[queuePointer].rotateR();
-
-  // Check if the piece is out of bounds or colliding after rotation
-  if (bounds() && collisionDetection()) {
-    // If the piece is out of bounds or colliding, rotate it back to the left to undo the action
+    // Rotate the current active piece in the queue to the left
     pieceQueue[queuePointer].rotateL();
+
+    // Check if the piece is out of bounds or colliding after rotation
+    if (bounds() && collisionDetection()) {
+      // If the piece is out of bounds or colliding, rotate it back to the right to undo the action
+      pieceQueue[queuePointer].rotateR();
+    }
   }
-}
 
-// Check if the Up Arrow key is pressed
-if (keyCode == '38' && gameProgression == "play") {
-  // The keyCode '38' corresponds to the Up Arrow key
+  // Check if the Right Arrow key is pressed
+  if (keyCode == '39' && gameProgression == "play") {
+    // The keyCode '39' corresponds to the Right Arrow key
 
-  // Rotate the current active piece in the queue upwards
-  pieceQueue[queuePointer].rotateU();
+    // Rotate the current active piece in the queue to the right
+    pieceQueue[queuePointer].rotateR();
 
-  // Check if the piece is out of bounds or colliding after rotation
-  if (bounds() && collisionDetection()) {
-    // If the piece is out of bounds or colliding, rotate it downwards to undo the action
-    pieceQueue[queuePointer].rotateD();
+    // Check if the piece is out of bounds or colliding after rotation
+    if (bounds() && collisionDetection()) {
+      // If the piece is out of bounds or colliding, rotate it back to the left to undo the action
+      pieceQueue[queuePointer].rotateL();
+    }
   }
-}
 
-// Check if the Down Arrow key is pressed
-if (keyCode == '40' && gameProgression == "play") {
-  // The keyCode '40' corresponds to the Down Arrow key
+  // Check if the Up Arrow key is pressed
+  if (keyCode == '38' && gameProgression == "play") {
+    // The keyCode '38' corresponds to the Up Arrow key
 
-  // Rotate the current active piece in the queue downwards
-  pieceQueue[queuePointer].rotateD();
-
-  // Check if the piece is out of bounds or colliding after rotation
-  if (bounds() && collisionDetection()) {
-    // If the piece is out of bounds or colliding, rotate it upwards to undo the action
+    // Rotate the current active piece in the queue upwards
     pieceQueue[queuePointer].rotateU();
+
+    // Check if the piece is out of bounds or colliding after rotation
+    if (bounds() && collisionDetection()) {
+      // If the piece is out of bounds or colliding, rotate it downwards to undo the action
+      pieceQueue[queuePointer].rotateD();
+    }
   }
-}
+
+  // Check if the Down Arrow key is pressed
+  if (keyCode == '40' && gameProgression == "play") {
+    // The keyCode '40' corresponds to the Down Arrow key
+
+    // Rotate the current active piece in the queue downwards
+    pieceQueue[queuePointer].rotateD();
+
+    // Check if the piece is out of bounds or colliding after rotation
+    if (bounds() && collisionDetection()) {
+      // If the piece is out of bounds or colliding, rotate it upwards to undo the action
+      pieceQueue[queuePointer].rotateU();
+    }
+  }
 }
 
 // Function to move a game piece to the right
@@ -392,7 +460,7 @@ function moveRight() {
   if (bounds() && collisionDetection()) {
     // If out of bounds or colliding, revert to the original position
     pieceQueue[queuePointer].setPos({ x: oldPos.x, layerNum: oldPos.layerNum, z: oldPos.z });
-  } 
+  }
 }
 
 // Function to move a game piece to the left
@@ -419,26 +487,26 @@ function moveDown() {
   pieceQueue[queuePointer].setPos({ x: oldPos.x, layerNum: oldPos.layerNum, z: oldPos.z + 1 });
   if (bounds() && collisionDetection()) {
     pieceQueue[queuePointer].setPos({ x: oldPos.x, layerNum: oldPos.layerNum, z: oldPos.z });
-  } 
+  }
 }
 
 // Function to switch between different camera views based on key input
 function keyTyped() {
   // Switch to camera 1
   if (key == '1') {
-    currentcamera = cam1;
+    gameCam = cam1;
   }
   // Switch to camera 2
   else if (key == '2') {
-    currentcamera = cam2;
+    gameCam = cam2;
   }
   // Switch to camera 3
   else if (key == '3') {
-    currentcamera = cam3;
+    gameCam = cam3;
   }
   // Switch to camera 4
   else if (key == '4') {
-    currentcamera = cam4;
+    gameCam = cam4;
   }
 }
 

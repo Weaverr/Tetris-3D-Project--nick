@@ -12,6 +12,6 @@ class devCam {
     // Method to set up and display the camera
     show() { 
     // Use the camera function to set up the camera position and orientation
-      camera(this.x, this.y, this.z, this.lookx, this.looky, this.lookz); 
+      this.camera = camera(this.x, this.y, this.z, this.lookx, this.looky, this.lookz); 
     }
   }
