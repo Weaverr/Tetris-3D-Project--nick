@@ -1,4 +1,5 @@
 // Variables
+// got rid of devCam
 let mytetrisGridL;
 let mytetrisGridR;
 let mytetrisGridF;
@@ -10,7 +11,16 @@ let cam1, cam2, cam3, cam4;
 let currentcamera;
 let isDropButtonPressed = false;
 let gameCam;
-let arial
+let arial;
+let currentGround = [255, 255, 255];
+let pauseGround = [255, 255, 0];
+let mainGround = [255, 255, 255];
+
+let angleX = 0;
+let angleY = 0;
+let rotationSpeedX = 0;
+let rotationSpeedY = 0;
+let lastMouseX, lastMouseY;
 
 
 function preload() {
@@ -38,6 +48,7 @@ function setup() {
   cam2.camera(-300, 0, 0, 0, 0, 0)
   cam3.camera(0, 0, 300, 0, 0, 0)
   cam4.camera(1, -500, 0, 0, 0, 0)
+  menuCam.camera()
   gameCam = cam1
 
   // Invokes the Gravity function at regular intervals defined by the timer variable which is set to 500
@@ -59,27 +70,48 @@ function setup() {
   downButton = createButton('Down');
   leftButton = createButton('Left');
   rightButton = createButton('Right');
-  dropButton = createButton('Drop')
+  dropButton = createButton('Drop');
   mMenuButton = createButton('Press to play');
-  overButton = createButton('Back to main menu')
+  overButton = createButton('Back to main menu');
+  settingsmainButton = createButton('Settings');
+  exitButton = createButton('Back to main menu');
+  tutorialmainButton = createButton('How to play');
+  tutorialpauseButton = createButton('How to play');
+  settingspauseButton = createButton('Settings')
+  exitToPauseButton = createButton('Back to pause menu');
 
   // Create button sizes
   upButton.size(80, 40);
   downButton.size(80, 40);
   leftButton.size(80, 40);
   rightButton.size(80, 40);
-  dropButton.size(500, 100)
-  mMenuButton.size(400, 100)
-  overButton.size(400, 100)
+  dropButton.size(500, 100);
+  mMenuButton.size(400, 100);
+  overButton.size(400, 100);
+  settingsmainButton.size(200,100);
+  exitButton.size(200,100);
+  tutorialmainButton.size(200,100);
+  tutorialpauseButton.size(200,100);
+  exitToPauseButton.size(200,100)
+  settingspauseButton.size(200,100)
 
   // Position the buttons
   upButton.position(100, windowHeight / 2 - 10);
   downButton.position(100, windowHeight / 2 + 50);
   leftButton.position(10, windowHeight / 2 + 20);
   rightButton.position(190, windowHeight / 2 + 20);
-  dropButton.position(windowWidth / 2 - 250, windowHeight / 2 + 260)
-  mMenuButton.position(windowWidth / 2 - 250, windowHeight / 2 + 260)
-  overButton.position(windowWidth / 2 - 250, windowHeight / 2 + 260)
+  dropButton.position(windowWidth / 2 - 250, windowHeight / 2 + 260);
+  mMenuButton.position(windowWidth / 2 - 200, windowHeight / 2 + 50);
+  overButton.position(windowWidth / 2 - 250, windowHeight / 2 + 260);
+  settingsmainButton.position(windowWidth / 2 - 100, windowHeight / 2 - 10);
+  exitButton.position(windowWidth / 2 - 100, windowHeight / 2 + 210);
+  tutorialmainButton.position(windowWidth / 2 - 100, windowHeight / 2 + 100);
+  tutorialpauseButton.position(windowWidth / 2 - 100, windowHeight / 2 + 100);
+  settingspauseButton.position(windowWidth / 2 - 100, windowHeight / 2 - 10);
+  exitToPauseButton.position(25,50)
+
+
+
 
   // Add event listeners to the buttons
   upButton.mousePressed(moveUp);
@@ -90,6 +122,14 @@ function setup() {
   dropButton.mouseReleased(stopDropping);
   mMenuButton.mouseReleased(playGame);
   overButton.mouseReleased(returnTomMenu);
+  exitButton.mouseReleased(returnTomMenu);
+  tutorialmainButton.mouseReleased(tutorialMainMenu);
+  settingsmainButton.mouseReleased(settingsMainMenu);
+  tutorialpauseButton.mouseReleased(tutorialPauseMenu);
+  settingspauseButton.mouseReleased(settingsPauseMenu);
+  exitToPauseButton.mouseReleased(returnToPause);
+
+
 
   upButton.hide();
   downButton.hide()
@@ -97,18 +137,53 @@ function setup() {
   rightButton.hide();
   dropButton.hide()
   overButton.hide()
+  settingsmainButton.hide()
+  exitButton.hide()
+  tutorialmainButton.hide()
+  tutorialpauseButton.hide()
+  exitToPauseButton.hide()
+  settingsmainButton.hide()
+ 
 
   // Calls the pieceGeneration() function to generate the first piece
   pieceGeneration()
 }
 
 function playGame() {
-  gameProgression = "play"
+  gameProgression = "play";
 }
 
 function returnTomMenu() {
-  console.log("triggered")
-  gameProgression = "mMenu"
+  console.log("triggered");
+  gameProgression = "mMenu";
+}
+
+function returnToPause(){
+  console.log("triggered");
+  gameProgression = "pause"
+}
+
+function tutorialPauseMenu(){
+  console.log("triggered");
+  gameProgression = "tutorialPause";
+
+}
+
+function settingsPauseMenu(){
+  console.log("triggered");
+  gameProgression = "settingsPause";
+}
+
+function tutorialMainMenu(){
+  console.log("triggered");
+  gameProgression = "tutorialMain";
+
+}
+
+function settingsMainMenu(){
+  console.log("triggered");
+  gameProgression = "settingsMain";
+
 }
 
 // Define the Gravity function using arrow function syntax
@@ -295,12 +370,16 @@ function processes() {
     dropButton.hide()
     overButton.hide()
     mMenuButton.hide()
+    exitButton.hide()
+    settingsmainButton.hide()
+    tutorialmainButton.hide()
+    tutorialpauseButton.hide()
   }
 }
 
 // The outputs function handles displaying visual outputs on the canvas.
 function outputs() {
-  background(255, 255, 255)
+  background(currentGround)
   if (gameProgression == "play") {
     setCamera(gameCam)
     stroke(255);
@@ -315,38 +394,69 @@ function outputs() {
     rightButton.show();
     dropButton.show()
     overButton.hide()
+    settingsmainButton.hide()
+    exitButton.hide()
+    tutorialmainButton.hide()
+    tutorialpauseButton.hide()
+    settingspauseButton.hide()
+    exitToPauseButton.hide()
   }
   if (gameProgression == "mMenu") {
+    background(mainGround);
+    settingsmainButton.size(400,100)
+    settingsmainButton.position(windowWidth / 2 - 200, windowHeight / 2 + 160)
     setCamera(menuCam)
     mMenuButton.show()
+    tutorialmainButton.size(400,100)
+    tutorialmainButton.position(windowWidth / 2 - 200, windowHeight / 2 + 270)
     push()
     textSize(100)
     fill(0)
-    text("Main Menu", 0, -200)
+    text("Tetris 3D", 0, -200)
     pop()
+    translate(10,-250,-500)
+    rotateX(frameCount * 1);
+    rotateY(frameCount * 1);
+    stroke('lime')
+    box(250);
+
     upButton.hide();
     downButton.hide()
     leftButton.hide();
     rightButton.hide();
-    dropButton.hide()
-    overButton.hide()
+    dropButton.hide();
+    overButton.hide();
+    settingsmainButton.show();
+    exitButton.hide();
+    tutorialmainButton.show();
+    exitToPauseButton.hide();
+    tutorialpauseButton.hide();
+    settingspauseButton.hide();
   }
 
   if (gameProgression == "pause") {
+    background(pauseGround);
     setCamera(menuCam)
+    settingspauseButton.show();
+    exitButton.show()
+    exitButton.position(windowWidth / 2 - 100, windowHeight / 2 + 210);
+    tutorialpauseButton.show()
     push()
     textSize(100)
     fill(0)
-    text("Pause", 0, -200)
+    text("Pause Menu", 0, -200)
     textSize(50)
-    text("Press 'p' to continue", 0, -50)
+    text("Press 'p' to continue", 0, -75)
     pop()
     upButton.hide();
     downButton.hide()
     leftButton.hide();
     rightButton.hide();
-    dropButton.hide()
-    overButton.hide()
+    dropButton.hide();
+    overButton.hide();
+    tutorialmainButton.hide()
+    settingsmainButton.hide()
+    exitToPauseButton.hide()
   }
   if (gameProgression == "over") {
     setCamera(menuCam)
@@ -362,7 +472,117 @@ function outputs() {
     dropButton.hide()
     mMenuButton.hide()
     overButton.show()
+    settingsmainButton.hide()
+    exitButton.hide()
+    tutorialmainButton.hide();
+    tutorialpauseButton.hide();
+    settingspauseButton.hide();
+    exitToPauseButton.hide();
   }
+
+  if (gameProgression == "tutorialMain") {
+    setCamera(menuCam)
+    exitButton.position(25,50)
+    push()
+    textSize(100)
+    fill(0)
+    text("Tutorial menu", 0, -400)
+    textSize(28)
+    text("How to play:", 0, -300)
+    pop()
+    upButton.hide();
+    downButton.hide()
+    leftButton.hide();
+    rightButton.hide();
+    dropButton.hide();
+    overButton.hide();
+    settingsmainButton.hide();
+    exitButton.show();
+    mMenuButton.hide();
+    tutorialmainButton.hide();
+    settingspauseButton.hide();
+
+  }
+
+  if (gameProgression == "settingsMain") {
+    setCamera(menuCam)
+    exitButton.position(25,50)
+    push()
+    textSize(100)
+    fill(0)
+    text("Settings Menu", 0, -400)
+    textSize(28)
+    text("Audio:", -650, -300)
+    text("Background:", -650, 0)
+    text("Controls:", -650, 300)
+    pop()
+    upButton.hide();
+    downButton.hide()
+    leftButton.hide();
+    rightButton.hide();
+    dropButton.hide();
+    overButton.hide();
+    settingsmainButton.hide();
+    exitButton.show();
+    mMenuButton.hide();
+    tutorialmainButton.hide();
+    settingspauseButton.hide();
+
+  }
+  if (gameProgression == "tutorialPause") {
+    setCamera(menuCam)
+    exitToPauseButton.show()
+    push()
+    textSize(100)
+    fill(0)
+    text("Tutorial menu", 0, -400)
+    textSize(28)
+    text("How to play:", 0, -300)
+    pop()
+    upButton.hide();
+    downButton.hide()
+    leftButton.hide();
+    rightButton.hide();
+    dropButton.hide();
+    overButton.hide();
+    settingsmainButton.hide();
+    tutorialpauseButton.hide()
+    exitButton.hide();
+    mMenuButton.hide();
+    tutorialmainButton.hide();
+    exitToPauseButton.show();
+    settingspauseButton.hide()
+
+  }
+  if (gameProgression == "settingsPause") {
+    setCamera(menuCam)
+    exitButton.position(25,50)
+    push()
+    textSize(100)
+    fill(0)
+    text("Settings Menu", 0, -400)
+    textSize(28)
+    text("Audio:", -650, -300)
+    text("Background:", -650, 0)
+    text("Controls:", -650, 300)
+    pop()
+    upButton.hide();
+    downButton.hide()
+    leftButton.hide();
+    rightButton.hide();
+    dropButton.hide();
+    overButton.hide();
+    settingsmainButton.hide();
+    exitButton.hide();
+    mMenuButton.hide();
+    tutorialmainButton.hide();
+    settingspauseButton.hide();
+    tutorialpauseButton.hide();
+    exitToPauseButton.show();
+
+  }
+  
+
 }
 
 function keyPressed() {
@@ -426,7 +646,8 @@ function keyPressed() {
     if (gameProgression == "pause") {
       // If the game is currently paused, change the state to "play"
       gameProgression = "play"
-    } else {
+    } else if (gameProgression == "play") {
+      // debuggingggg up there line above
       // If the game is currently playing, change the state to "pause"
       gameProgression = "pause"
     }
