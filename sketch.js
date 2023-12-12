@@ -23,15 +23,13 @@ let lastMouseX, lastMouseY;
 let gameSong, uziSong;
 let muteButton;
 let isMuted = false;
-
-
+let colorPicker;
 
 function preload() {
   arial = loadFont('arial.ttf');
   gameSong = loadSound('music.mp3');
   uziSong = loadSound('uzi.mp3');
-  moonSong = loadSound('moon.mp3')
-
+  moonSong = loadSound('moon.mp3');
 }
 
 
@@ -44,19 +42,19 @@ function setup() {
   angleMode(DEGREES); // Utilize degrees for angle measurements
 
   // Create new camera objectS and set its initial position and target
-  menuCam = createCamera()
-  setCamera(menuCam)
-  cam1 = createCamera()
-  cam2 = createCamera()
-  cam3 = createCamera()
-  cam4 = createCamera()
+  menuCam = createCamera();
+  setCamera(menuCam);
+  cam1 = createCamera();
+  cam2 = createCamera();
+  cam3 = createCamera();
+  cam4 = createCamera();
 
   cam1.camera(-250, -300, 250, 0, -100, 0);
-  cam2.camera(-300, 0, 0, 0, 0, 0)
-  cam3.camera(0, 0, 300, 0, 0, 0)
-  cam4.camera(1, -500, 0, 0, 0, 0)
-  menuCam.camera()
-  gameCam = cam1
+  cam2.camera(-300, 0, 0, 0, 0, 0);
+  cam3.camera(0, 0, 300, 0, 0, 0);
+  cam4.camera(1, -500, 0, 0, 0, 0);
+  menuCam.camera();
+  gameCam = cam1;
 
   // Invokes the Gravity function at regular intervals defined by the timer variable which is set to 500
   setInterval(() => Gravity(), timer);
@@ -71,7 +69,6 @@ function setup() {
   mytetrisGridF = new tetrisGrid(100, 100, 0, 0, -5, 0, 90, 0, 255, { r: 0, g: 0, b: 0 });
 
   currentSong = gameSong;
-
 
   // Create buttons with labels
   upButton = createButton('Up');
@@ -90,6 +87,11 @@ function setup() {
   volumeSlider = createSlider(0, 1, 0.5, 0.01);
   muteButton = createButton('Mute');
   trackSelector = createSelect();
+  colorPicker = createColorPicker('#ffffff');
+  rotateU = createButton('Rotate Up');
+  rotateD = createButton('Rotate Down');
+  rotateL = createButton('Rotate Left');
+  rotateR = createButton('Rotate Right');
 
 
   trackSelector.option('Original Track', 'original');
@@ -101,6 +103,10 @@ function setup() {
   downButton.size(80, 40);
   leftButton.size(80, 40);
   rightButton.size(80, 40);
+  rotateU.size(80, 40);
+  rotateD.size(80, 40);
+  rotateL.size(80, 40);
+  rotateR.size(80, 40);
   dropButton.size(500, 100);
   mMenuButton.size(400, 100);
   overButton.size(400, 100);
@@ -110,15 +116,19 @@ function setup() {
   tutorialpauseButton.size(200,100);
   exitToPauseButton.size(200,100)
   settingspauseButton.size(200,100)
-  muteButton.size(130,30)
-  trackSelector.size(130,30)
-
+  muteButton.size(130,30);
+  trackSelector.size(130,30);
+  colorPicker.size(100, 30);
 
   // Position the buttons
   upButton.position(100, windowHeight / 2 - 10);
   downButton.position(100, windowHeight / 2 + 50);
   leftButton.position(10, windowHeight / 2 + 20);
   rightButton.position(190, windowHeight / 2 + 20);
+  rotateU.position(1700, windowHeight / 2 - 10);
+  rotateD.position(1700, windowHeight / 2 + 50);
+  rotateL.position(1610, windowHeight / 2 + 20);
+  rotateR.position(1790, windowHeight / 2 + 20);
   dropButton.position(windowWidth / 2 - 250, windowHeight / 2 + 260);
   mMenuButton.position(windowWidth / 2 - 200, windowHeight / 2 + 50);
   overButton.position(windowWidth / 2 - 250, windowHeight / 2 + 260);
@@ -131,16 +141,17 @@ function setup() {
   volumeSlider.position(windowWidth / 2 -525, windowHeight / 2 - 250);
   muteButton.position(windowWidth / 2 -524, windowHeight / 2 - 200);
   trackSelector.position(windowWidth / 2 -524, windowHeight / 2 - 140);
-
-
-
-
+  colorPicker.position(windowWidth / 2 -510, windowHeight / 2 + 50);
 
   // Add event listeners to the buttons
   upButton.mousePressed(moveUp);
   downButton.mousePressed(moveDown);
   leftButton.mousePressed(moveLeft);
   rightButton.mousePressed(moveRight);
+  rotateU.mousePressed(RotateUp);
+  rotateD.mousePressed(RotateDown);
+  rotateL.mousePressed(RotateLeft);
+  rotateR.mousePressed(RotateRight);
   dropButton.mousePressed(startDropping);
   dropButton.mouseReleased(stopDropping);
   mMenuButton.mouseReleased(playGame);
@@ -155,12 +166,14 @@ function setup() {
   muteButton.mousePressed(toggleMute);
   trackSelector.changed(changeTrack);
 
-
-
   upButton.hide();
   downButton.hide()
   leftButton.hide();
   rightButton.hide();
+  rotateU.hide();
+  rotateD.hide();
+  rotateL.hide();
+  rotateR.hide();
   dropButton.hide();
   overButton.hide();
   settingsmainButton.hide();
@@ -205,20 +218,24 @@ function toggleMute() {
 function changeTrack() {
   let selectedTrack = trackSelector.value();
   if (selectedTrack === 'original') {
-      uziSong.stop();
-      moonSong.stop()
-      currentSong = gameSong;
-      gameSong.loop();
+    // added line below due to issue with mute and unmute
+    muteButton.html('Mute');
+    uziSong.stop();
+    moonSong.stop();
+    currentSong = gameSong;
+    gameSong.loop();
   } else if (selectedTrack === 'uzi') {
-      gameSong.stop();
-      moonSong.stop()
-      currentSong = uziSong;
-      uziSong.loop();
+    muteButton.html('Mute');
+    gameSong.stop();
+    moonSong.stop();
+    currentSong = uziSong;
+    uziSong.loop();
   } else if (selectedTrack === 'moon'){
-    gameSong.stop()
-    uziSong.stop()
+    muteButton.html('Mute');
+    gameSong.stop();
+    uziSong.stop();
     currentSong = moonSong;
-    moonSong.loop() 
+    moonSong.loop(); 
   }
   setVolume(); // Update volume for the new track
 }
@@ -443,6 +460,10 @@ function processes() {
     downButton.hide()
     leftButton.hide();
     rightButton.hide();
+    rotateU.hide();
+    rotateD.hide();
+    rotateL.hide();
+    rotateR.hide();
     dropButton.hide()
     overButton.hide()
     mMenuButton.hide()
@@ -458,6 +479,7 @@ function processes() {
 
 // The outputs function handles displaying visual outputs on the canvas.
 function outputs() {
+  currentGround = colorPicker.value()
   background(currentGround)
   if (gameProgression == "play") {
     setCamera(gameCam)
@@ -471,41 +493,49 @@ function outputs() {
     downButton.show()
     leftButton.show();
     rightButton.show();
-    dropButton.show()
-    overButton.hide()
-    settingsmainButton.hide()
-    exitButton.hide()
-    tutorialmainButton.hide()
-    tutorialpauseButton.hide()
-    settingspauseButton.hide()
-    exitToPauseButton.hide()
-    volumeSlider.hide()
-    muteButton.hide()
-    trackSelector.hide()
+    rotateU.show();
+    rotateD.show();
+    rotateL.show();
+    rotateR.show();
+    dropButton.show();
+    overButton.hide();
+    settingsmainButton.hide();
+    exitButton.hide();
+    tutorialmainButton.hide();
+    tutorialpauseButton.hide();
+    settingspauseButton.hide();
+    exitToPauseButton.hide();
+    volumeSlider.hide();
+    muteButton.hide();
+    trackSelector.hide();
   }
   if (gameProgression == "mMenu") {
     background(mainGround);
-    settingsmainButton.size(400,100)
-    settingsmainButton.position(windowWidth / 2 - 200, windowHeight / 2 + 160)
-    setCamera(menuCam)
-    mMenuButton.show()
-    tutorialmainButton.size(400,100)
-    tutorialmainButton.position(windowWidth / 2 - 200, windowHeight / 2 + 270)
-    push()
-    textSize(100)
-    fill(0)
-    text("Tetris 3D", 0, -200)
-    pop()
-    translate(10,-250,-500)
+    settingsmainButton.size(400,100);
+    settingsmainButton.position(windowWidth / 2 - 200, windowHeight / 2 + 160);
+    setCamera(menuCam);
+    mMenuButton.show();
+    tutorialmainButton.size(400,100);
+    tutorialmainButton.position(windowWidth / 2 - 200, windowHeight / 2 + 270);
+    push();
+    textSize(100);
+    fill(0);
+    text("Tetris 3D", 0, -200);
+    pop();
+    translate(10,-250,-500);
     rotateX(frameCount * 1);
     rotateY(frameCount * 1);
-    stroke('lime')
+    stroke('lime');
     box(250);
 
     upButton.hide();
     downButton.hide()
     leftButton.hide();
     rightButton.hide();
+    rotateU.hide();
+    rotateD.hide();
+    rotateL.hide();
+    rotateR.hide();
     dropButton.hide();
     overButton.hide();
     settingsmainButton.show();
@@ -514,77 +544,94 @@ function outputs() {
     exitToPauseButton.hide();
     tutorialpauseButton.hide();
     settingspauseButton.hide();
-    volumeSlider.hide()
-    muteButton.hide()
-    trackSelector.hide()
+    volumeSlider.hide();
+    muteButton.hide();
+    trackSelector.hide();
+    colorPicker.hide();
   }
 
   if (gameProgression == "pause") {
     background(pauseGround);
-    setCamera(menuCam)
+    setCamera(menuCam);
     settingspauseButton.show();
-    exitButton.show()
+    exitButton.show();
     exitButton.position(windowWidth / 2 - 100, windowHeight / 2 + 210);
-    tutorialpauseButton.show()
-    push()
-    textSize(100)
-    fill(0)
-    text("Pause Menu", 0, -200)
-    textSize(50)
-    text("Press 'p' to continue", 0, -75)
-    pop()
+    tutorialpauseButton.show();
+    push();
+    textSize(100);
+    fill(0);
+    text("Pause Menu", 0, -200);
+    textSize(50);
+    text("Press 'p' to continue", 0, -75);
+    pop();
     upButton.hide();
     downButton.hide()
     leftButton.hide();
     rightButton.hide();
+    rotateU.hide();
+    rotateD.hide();
+    rotateL.hide();
+    rotateR.hide();
     dropButton.hide();
     overButton.hide();
-    tutorialmainButton.hide()
-    settingsmainButton.hide()
-    exitToPauseButton.hide()
-    volumeSlider.hide()
-    muteButton.hide()
-    trackSelector.hide()
+    tutorialmainButton.hide();
+    settingsmainButton.hide();
+    exitToPauseButton.hide();
+    volumeSlider.hide();
+    muteButton.hide();
+    trackSelector.hide();
+    colorPicker.hide();
   }
   if (gameProgression == "over") {
-    setCamera(menuCam)
-    push()
-    textSize(100)
-    fill(0)
-    text("Game over", 0, -200)
-    pop()
+    background(mainGround);
+    setCamera(menuCam);
+    push();
+    textSize(100);
+    fill(0);
+    text("Game over", 0, -200);
+    pop();
     upButton.hide();
     downButton.hide()
     leftButton.hide();
     rightButton.hide();
-    dropButton.hide()
-    mMenuButton.hide()
-    overButton.show()
-    settingsmainButton.hide()
-    exitButton.hide()
+    rotateU.hide();
+    rotateD.hide();
+    rotateL.hide();
+    rotateR.hide();
+    dropButton.hide();
+    mMenuButton.hide();
+    overButton.show();
+    settingsmainButton.hide();
+    exitButton.hide();
     tutorialmainButton.hide();
     tutorialpauseButton.hide();
     settingspauseButton.hide();
     exitToPauseButton.hide();
-    volumeSlider.hide()
-    muteButton.hide()
-    trackSelector.hide()
+    volumeSlider.hide();
+    muteButton.hide();
+    trackSelector.hide();
+    colorPicker.hide();
   }
 
   if (gameProgression == "tutorialMain") {
-    setCamera(menuCam)
-    exitButton.position(25,50)
-    push()
-    textSize(100)
-    fill(0)
-    text("Tutorial menu", 0, -400)
-    textSize(28)
-    text("How to play:", 0, -300)
-    pop()
+    background(mainGround);
+    setCamera(menuCam);
+    exitButton.position(25,50);
+    push();
+    textSize(100);
+    fill(0);
+    text("Tutorial menu", 0, -400);
+    textSize(28);
+    text("How to play:", 0, -300);
+    pop();
     upButton.hide();
     downButton.hide()
     leftButton.hide();
     rightButton.hide();
+    rotateU.hide();
+    rotateD.hide();
+    rotateL.hide();
+    rotateR.hide();
     dropButton.hide();
     overButton.hide();
     settingsmainButton.hide();
@@ -592,32 +639,38 @@ function outputs() {
     mMenuButton.hide();
     tutorialmainButton.hide();
     settingspauseButton.hide();
-    volumeSlider.hide()
-    muteButton.hide()
-    trackSelector.hide()
+    volumeSlider.hide();
+    muteButton.hide();
+    trackSelector.hide();
+    colorPicker.hide();
 
   }
 
   if (gameProgression == "settingsMain") {
-    setCamera(menuCam)
-    exitButton.position(25,50)
-    push()
-    textSize(100)
-    fill(0)
-    text("Settings Menu", 0, -400)
-    textSize(28)
-    text("Audio:", -650, -300)
-    text("Background:", -650, 0)
-    text("Controls:", -650, 300)
-    textSize(24)
-    text("Volume:", -600, -245)
-    text("Mute Sound:", -625, -185 )
-    text("Current Track:", -625, -125 )
-    pop()
+    background(mainGround);
+    setCamera(menuCam);
+    exitButton.position(25,50);
+    push();
+    textSize(100);
+    fill(0);
+    text("Settings Menu", 0, -400);
+    textSize(28);
+    text("Audio:", -650, -300);
+    text("Background:", -650, 0);
+    textSize(24);
+    text("Volume:", -600, -245);
+    text("Mute Sound:", -625, -185 );
+    text("Current Track:", -625, -125 );
+    text("Background Color:", -625, 60 );
+    pop();
     upButton.hide();
     downButton.hide()
     leftButton.hide();
     rightButton.hide();
+    rotateU.hide();
+    rotateD.hide();
+    rotateL.hide();
+    rotateR.hide();
     dropButton.hide();
     overButton.hide();
     settingsmainButton.hide();
@@ -625,25 +678,31 @@ function outputs() {
     mMenuButton.hide();
     tutorialmainButton.hide();
     settingspauseButton.hide();
-    volumeSlider.show()
-    muteButton.show()
-    trackSelector.show()
+    volumeSlider.show();
+    muteButton.show();
+    trackSelector.show();
+    colorPicker.show();
 
   }
   if (gameProgression == "tutorialPause") {
-    setCamera(menuCam)
-    exitToPauseButton.show()
-    push()
-    textSize(100)
-    fill(0)
-    text("Tutorial menu", 0, -400)
-    textSize(28)
-    text("How to play:", 0, -300)
-    pop()
+    background(mainGround);
+    setCamera(menuCam);
+    exitToPauseButton.show();
+    push();
+    textSize(100);
+    fill(0);
+    text("Tutorial menu", 0, -400);
+    textSize(28);
+    text("How to play:", 0, -300);
+    pop();
     upButton.hide();
     downButton.hide()
     leftButton.hide();
     rightButton.hide();
+    rotateU.hide();
+    rotateD.hide();
+    rotateL.hide();
+    rotateR.hide();
     dropButton.hide();
     overButton.hide();
     settingsmainButton.hide();
@@ -656,29 +715,35 @@ function outputs() {
     volumeSlider.hide()
     muteButton.hide()
     trackSelector.hide()
+    colorPicker.hide()
 
   }
   if (gameProgression == "settingsPause") {
-    setCamera(menuCam)
-    exitButton.position(25,50)
-    push()
-    textSize(100)
-    fill(0)
-    text("Settings Menu", 0, -400)
-    textSize(28)
-    text("Audio:", -650, -300)
-    text("Volume:", -500, -500)
-    text("Background:", -650, 0)
-    text("Controls:", -650, 300)
-    textSize(24)
-    text("Volume:", -600, -245)
-    text("Mute Sound:", -625, -185 )
-    text("Current Track:", -625, -125 )
-    pop()
+    background(mainGround);
+    setCamera(menuCam);
+    exitButton.position(25,50);
+    push();
+    textSize(100);
+    fill(0);
+    text("Settings Menu", 0, -400);
+    textSize(28);
+    text("Audio:", -650, -300);
+    text("Volume:", -500, -500);
+    text("Background:", -650, 0);
+    textSize(24);
+    text("Volume:", -600, -245);
+    text("Mute Sound:", -625, -185 );
+    text("Current Track:", -625, -125 );
+    text("Background Color:", -625, 60 );
+    pop();
     upButton.hide();
     downButton.hide()
     leftButton.hide();
     rightButton.hide();
+    rotateU.hide();
+    rotateD.hide();
+    rotateL.hide();
+    rotateR.hide();
     dropButton.hide();
     overButton.hide();
     settingsmainButton.hide();
@@ -691,6 +756,7 @@ function outputs() {
     volumeSlider.show()
     muteButton.show()
     trackSelector.show()
+    colorPicker.show()
 
   }
   
@@ -859,6 +925,46 @@ function moveDown() {
   pieceQueue[queuePointer].setPos({ x: oldPos.x, layerNum: oldPos.layerNum, z: oldPos.z + 1 });
   if (bounds() && collisionDetection()) {
     pieceQueue[queuePointer].setPos({ x: oldPos.x, layerNum: oldPos.layerNum, z: oldPos.z });
+  }
+}
+
+function RotateUp(){
+  pieceQueue[queuePointer].rotateU();
+
+  // Check if the piece is out of bounds or colliding after rotation
+  if (bounds() && collisionDetection()) {
+    // If the piece is out of bounds or colliding, rotate it downwards to undo the action
+    pieceQueue[queuePointer].rotateD();
+  }
+}
+
+function RotateDown(){
+  pieceQueue[queuePointer].rotateD();
+
+  // Check if the piece is out of bounds or colliding after rotation
+  if (bounds() && collisionDetection()) {
+    // If the piece is out of bounds or colliding, rotate it upwards to undo the action
+    pieceQueue[queuePointer].rotateU();
+  }
+}
+
+function RotateLeft(){
+  pieceQueue[queuePointer].rotateL();
+
+  // Check if the piece is out of bounds or colliding after rotation
+  if (bounds() && collisionDetection()) {
+    // If the piece is out of bounds or colliding, rotate it back to the right to undo the action
+    pieceQueue[queuePointer].rotateR();
+  }
+}
+
+function RotateRight(){
+  pieceQueue[queuePointer].rotateR();
+
+  // Check if the piece is out of bounds or colliding after rotation
+  if (bounds() && collisionDetection()) {
+    // If the piece is out of bounds or colliding, rotate it back to the left to undo the action
+    pieceQueue[queuePointer].rotateL();
   }
 }
 
