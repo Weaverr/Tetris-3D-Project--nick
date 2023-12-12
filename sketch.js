@@ -14,6 +14,7 @@ let gameCam;
 let arial;
 let pauseGround = [255, 255, 0];
 let mainGround = [255, 255, 255];
+let currentGround = [255, 255, 255]
 let angleX = 0;
 let angleY = 0;
 let rotationSpeedX = 0;
@@ -22,8 +23,7 @@ let lastMouseX, lastMouseY;
 let gameSong, uziSong;
 let muteButton;
 let isMuted = false;
-let bgColor;
-let colorPicker;
+
 
 
 function preload() {
@@ -71,7 +71,7 @@ function setup() {
   mytetrisGridF = new tetrisGrid(100, 100, 0, 0, -5, 0, 90, 0, 255, { r: 0, g: 0, b: 0 });
 
   currentSong = gameSong;
-  bgColor = color(255);
+
 
   // Create buttons with labels
   upButton = createButton('Up');
@@ -90,8 +90,6 @@ function setup() {
   volumeSlider = createSlider(0, 1, 0.5, 0.01);
   muteButton = createButton('Mute');
   trackSelector = createSelect();
-  colorPicker = createColorPicker('#ffffff');
-
 
 
   trackSelector.option('Original Track', 'original');
@@ -114,7 +112,6 @@ function setup() {
   settingspauseButton.size(200,100)
   muteButton.size(130,30)
   trackSelector.size(130,30)
-  colorPicker.position(10, 100);
 
 
   // Position the buttons
@@ -456,15 +453,13 @@ function processes() {
     volumeSlider.hide()
     muteButton.hide()
     trackSelector.hide()
-    colorPicker.hide()
   }
 }
 
 // The outputs function handles displaying visual outputs on the canvas.
 function outputs() {
+  background(currentGround)
   if (gameProgression == "play") {
-    bgColor = colorPicker.value(); // Update the background color based on picker
-    background(bgColor); // Set the background color in the main game
     setCamera(gameCam)
     stroke(255);
     for (let i = 0; i < pieceQueue.length; i++) { pieceQueue[i].show() }
