@@ -12,19 +12,26 @@ let currentcamera;
 let isDropButtonPressed = false;
 let gameCam;
 let arial;
-let currentGround = [255, 255, 255];
 let pauseGround = [255, 255, 0];
 let mainGround = [255, 255, 255];
-
 let angleX = 0;
 let angleY = 0;
 let rotationSpeedX = 0;
 let rotationSpeedY = 0;
 let lastMouseX, lastMouseY;
+let gameSong, uziSong;
+let muteButton;
+let isMuted = false;
+let bgColor;
+let colorPicker;
 
 
 function preload() {
   arial = loadFont('arial.ttf');
+  gameSong = loadSound('music.mp3');
+  uziSong = loadSound('uzi.mp3');
+  moonSong = loadSound('moon.mp3')
+
 }
 
 
@@ -63,7 +70,8 @@ function setup() {
   // Create the floor of the tetris grid with specified properties
   mytetrisGridF = new tetrisGrid(100, 100, 0, 0, -5, 0, 90, 0, 255, { r: 0, g: 0, b: 0 });
 
-  // Create multiple camera objects and instantiate camera variables 
+  currentSong = gameSong;
+  bgColor = color(255);
 
   // Create buttons with labels
   upButton = createButton('Up');
@@ -79,6 +87,16 @@ function setup() {
   tutorialpauseButton = createButton('How to play');
   settingspauseButton = createButton('Settings')
   exitToPauseButton = createButton('Back to pause menu');
+  volumeSlider = createSlider(0, 1, 0.5, 0.01);
+  muteButton = createButton('Mute');
+  trackSelector = createSelect();
+  colorPicker = createColorPicker('#ffffff');
+
+
+
+  trackSelector.option('Original Track', 'original');
+  trackSelector.option('Uzi Track', 'uzi');
+  trackSelector.option('Moon Track', 'moon');
 
   // Create button sizes
   upButton.size(80, 40);
@@ -94,6 +112,10 @@ function setup() {
   tutorialpauseButton.size(200,100);
   exitToPauseButton.size(200,100)
   settingspauseButton.size(200,100)
+  muteButton.size(130,30)
+  trackSelector.size(130,30)
+  colorPicker.position(10, 100);
+
 
   // Position the buttons
   upButton.position(100, windowHeight / 2 - 10);
@@ -108,7 +130,11 @@ function setup() {
   tutorialmainButton.position(windowWidth / 2 - 100, windowHeight / 2 + 100);
   tutorialpauseButton.position(windowWidth / 2 - 100, windowHeight / 2 + 100);
   settingspauseButton.position(windowWidth / 2 - 100, windowHeight / 2 - 10);
-  exitToPauseButton.position(25,50)
+  exitToPauseButton.position(25,50);
+  volumeSlider.position(windowWidth / 2 -525, windowHeight / 2 - 250);
+  muteButton.position(windowWidth / 2 -524, windowHeight / 2 - 200);
+  trackSelector.position(windowWidth / 2 -524, windowHeight / 2 - 140);
+
 
 
 
@@ -128,6 +154,9 @@ function setup() {
   tutorialpauseButton.mouseReleased(tutorialPauseMenu);
   settingspauseButton.mouseReleased(settingsPauseMenu);
   exitToPauseButton.mouseReleased(returnToPause);
+  volumeSlider.input(setVolume);
+  muteButton.mousePressed(toggleMute);
+  trackSelector.changed(changeTrack);
 
 
 
@@ -135,22 +164,72 @@ function setup() {
   downButton.hide()
   leftButton.hide();
   rightButton.hide();
-  dropButton.hide()
-  overButton.hide()
-  settingsmainButton.hide()
-  exitButton.hide()
-  tutorialmainButton.hide()
-  tutorialpauseButton.hide()
-  exitToPauseButton.hide()
-  settingsmainButton.hide()
+  dropButton.hide();
+  overButton.hide();
+  settingsmainButton.hide();
+  exitButton.hide();
+  tutorialmainButton.hide();
+  tutorialpauseButton.hide();
+  exitToPauseButton.hide();
+  settingsmainButton.hide();
+  volumeSlider.hide();
+  muteButton.hide();
+  trackSelector.hide()
  
 
   // Calls the pieceGeneration() function to generate the first piece
   pieceGeneration()
 }
 
+function setVolume() {
+  let volume = volumeSlider.value();
+  if (currentSong) {
+      currentSong.setVolume(volume);
+  }
+}
+
 function playGame() {
   gameProgression = "play";
+  playMusic();
+}
+
+function toggleMute() {
+  if (isMuted) {
+      currentSong.setVolume(0.5); // Restore previous volume
+      muteButton.html('Mute');
+      isMuted = false;
+  } else {
+      currentSong.setVolume(0); // Mute the song
+      muteButton.html('Unmute');
+      isMuted = true;
+  }
+}
+
+function changeTrack() {
+  let selectedTrack = trackSelector.value();
+  if (selectedTrack === 'original') {
+      uziSong.stop();
+      moonSong.stop()
+      currentSong = gameSong;
+      gameSong.loop();
+  } else if (selectedTrack === 'uzi') {
+      gameSong.stop();
+      moonSong.stop()
+      currentSong = uziSong;
+      uziSong.loop();
+  } else if (selectedTrack === 'moon'){
+    gameSong.stop()
+    uziSong.stop()
+    currentSong = moonSong;
+    moonSong.loop() 
+  }
+  setVolume(); // Update volume for the new track
+}
+
+function playMusic() {
+  if (!currentSong.isPlaying()) {
+    currentSong.loop(); // Loop the song
+  }
 }
 
 function returnTomMenu() {
@@ -374,13 +453,18 @@ function processes() {
     settingsmainButton.hide()
     tutorialmainButton.hide()
     tutorialpauseButton.hide()
+    volumeSlider.hide()
+    muteButton.hide()
+    trackSelector.hide()
+    colorPicker.hide()
   }
 }
 
 // The outputs function handles displaying visual outputs on the canvas.
 function outputs() {
-  background(currentGround)
   if (gameProgression == "play") {
+    bgColor = colorPicker.value(); // Update the background color based on picker
+    background(bgColor); // Set the background color in the main game
     setCamera(gameCam)
     stroke(255);
     for (let i = 0; i < pieceQueue.length; i++) { pieceQueue[i].show() }
@@ -400,6 +484,9 @@ function outputs() {
     tutorialpauseButton.hide()
     settingspauseButton.hide()
     exitToPauseButton.hide()
+    volumeSlider.hide()
+    muteButton.hide()
+    trackSelector.hide()
   }
   if (gameProgression == "mMenu") {
     background(mainGround);
@@ -432,6 +519,9 @@ function outputs() {
     exitToPauseButton.hide();
     tutorialpauseButton.hide();
     settingspauseButton.hide();
+    volumeSlider.hide()
+    muteButton.hide()
+    trackSelector.hide()
   }
 
   if (gameProgression == "pause") {
@@ -457,6 +547,9 @@ function outputs() {
     tutorialmainButton.hide()
     settingsmainButton.hide()
     exitToPauseButton.hide()
+    volumeSlider.hide()
+    muteButton.hide()
+    trackSelector.hide()
   }
   if (gameProgression == "over") {
     setCamera(menuCam)
@@ -478,6 +571,9 @@ function outputs() {
     tutorialpauseButton.hide();
     settingspauseButton.hide();
     exitToPauseButton.hide();
+    volumeSlider.hide()
+    muteButton.hide()
+    trackSelector.hide()
   }
 
   if (gameProgression == "tutorialMain") {
@@ -501,6 +597,9 @@ function outputs() {
     mMenuButton.hide();
     tutorialmainButton.hide();
     settingspauseButton.hide();
+    volumeSlider.hide()
+    muteButton.hide()
+    trackSelector.hide()
 
   }
 
@@ -515,6 +614,10 @@ function outputs() {
     text("Audio:", -650, -300)
     text("Background:", -650, 0)
     text("Controls:", -650, 300)
+    textSize(24)
+    text("Volume:", -600, -245)
+    text("Mute Sound:", -625, -185 )
+    text("Current Track:", -625, -125 )
     pop()
     upButton.hide();
     downButton.hide()
@@ -527,6 +630,9 @@ function outputs() {
     mMenuButton.hide();
     tutorialmainButton.hide();
     settingspauseButton.hide();
+    volumeSlider.show()
+    muteButton.show()
+    trackSelector.show()
 
   }
   if (gameProgression == "tutorialPause") {
@@ -552,6 +658,9 @@ function outputs() {
     tutorialmainButton.hide();
     exitToPauseButton.show();
     settingspauseButton.hide()
+    volumeSlider.hide()
+    muteButton.hide()
+    trackSelector.hide()
 
   }
   if (gameProgression == "settingsPause") {
@@ -563,8 +672,13 @@ function outputs() {
     text("Settings Menu", 0, -400)
     textSize(28)
     text("Audio:", -650, -300)
+    text("Volume:", -500, -500)
     text("Background:", -650, 0)
     text("Controls:", -650, 300)
+    textSize(24)
+    text("Volume:", -600, -245)
+    text("Mute Sound:", -625, -185 )
+    text("Current Track:", -625, -125 )
     pop()
     upButton.hide();
     downButton.hide()
@@ -579,6 +693,9 @@ function outputs() {
     settingspauseButton.hide();
     tutorialpauseButton.hide();
     exitToPauseButton.show();
+    volumeSlider.show()
+    muteButton.show()
+    trackSelector.show()
 
   }
   
