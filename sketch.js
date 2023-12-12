@@ -184,7 +184,10 @@ function setup() {
   settingsmainButton.hide();
   volumeSlider.hide();
   muteButton.hide();
-  trackSelector.hide()
+  trackSelector.hide();
+  colorPicker.hide();
+  settingspauseButton.hide();
+  mMenuButton.hide();
  
 
   // Calls the pieceGeneration() function to generate the first piece
@@ -474,6 +477,7 @@ function processes() {
     volumeSlider.hide()
     muteButton.hide()
     trackSelector.hide()
+    colorPicker.hide()
   }
 }
 
