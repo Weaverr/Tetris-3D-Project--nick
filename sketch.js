@@ -458,6 +458,11 @@ function inputs() {
 
 // The processes function handles data processing and calculations.
 function processes() {
+  if(gameProgression == "mMenu"){
+    queuePointer = -1
+    pieceQueue = []
+    pieceGeneration()
+  }
   if (gameProgression == "play") {
     upButton.hide();
     downButton.hide()
