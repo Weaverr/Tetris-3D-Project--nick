@@ -5,11 +5,6 @@ function setVolume() {
     }
   }
   
-  function playGame() {
-    gameProgression = "play";
-    playMusic();
-  }
-  
   function toggleMute() {
     if (isMuted) {
         currentSong.setVolume(0.5); // Restore previous volume

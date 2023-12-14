@@ -1,3 +1,4 @@
+// The buttonInitialize function is responsible for creating buttons with labels.
 function buttonInitialise(){
     // Create buttons with labels
     // gotta change the settingsPauseButton shit rememebr when U SEEEEEEEE

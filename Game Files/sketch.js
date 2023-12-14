@@ -1,4 +1,6 @@
+// The preload function is called before setup() and is used to load external assets.
 function preload() {
+  // Load the 'arial.ttf' font file and assign it to the variable 'arial'.
   arial = loadFont('arial.ttf');
   option1 = loadSound('Game Music/Music Files/Track1.mp3');
   option2 = loadSound('Game Music/Music Files/Track2.mp3');
@@ -48,6 +50,16 @@ function setup() {
   buttonInitialise()
   pieceGeneration()
 }
+
+// The playGame function is called to start the gameplay.
+function playGame() {
+  // Set the game progression state to "play," indicating that the game is in the playing phase.
+  gameProgression = "play";
+
+  // Call the playMusic function to start playing background music or sound.
+  //playMusic();
+}
+
 
 // Define the Gravity function using arrow function syntax
 let Gravity = () => {
@@ -222,15 +234,21 @@ function inputs() {
 
   if (isDropButtonPressed) { pieceDropLogic() }
 }
-
 // The processes function handles data processing and calculations.
 function processes() {
-  if(gameProgression == "mMenu"){
-    queuePointer = -1
-    pieceQueue = []
-    pieceGeneration()
+  // Check if the game progression is at the main menu.
+  if (gameProgression == "mMenu") {
+    // Reset the queue pointer and clear the piece queue.
+    queuePointer = -1;
+    pieceQueue = [];
+
+    // Generate a new set of game pieces.
+    pieceGeneration();
   }
+
+  // Check if the game progression is during gameplay.
   if (gameProgression == "play") {
+    // Hide the directional buttons and the drop button.
     upButton.hide();
     downButton.hide()
     leftButton.hide();
@@ -253,20 +271,43 @@ function processes() {
   }
 }
 
+
 // The outputs function handles displaying visual outputs on the canvas.
 function outputs() {
-  currentGround = colorPicker.value()
-  background(currentGround)
+  // Get the current selected ground color from a color picker.
+  currentGround = colorPicker.value();
+
+  // Set the background of the canvas to the selected ground color.
+  background(currentGround);
+
+  // Check if the game progression is during gameplay.
   if (gameProgression == "play") {
-    setCamera(gameCam)
+    // Set the camera to a specific game camera, likely for gameplay view.
+    setCamera(gameCam);
+
+    // Set the stroke color to white (for drawing lines).
     stroke(255);
-    for (let i = 0; i < pieceQueue.length; i++) { pieceQueue[i].show() }
-    stroke('lime')
-    mytetrisGridL.show(); // Display the left Tetris grid element
-    mytetrisGridR.show(); // Display the right Tetris grid element
-    mytetrisGridF.show(); // Display the front Tetris grid element
+
+    // Display each piece in the piece queue.
+    for (let i = 0; i < pieceQueue.length; i++) {
+      pieceQueue[i].show();
+    }
+
+    // Set the stroke color to lime green.
+    stroke('lime');
+
+    // Display the left Tetris grid element.
+    mytetrisGridL.show();
+
+    // Display the right Tetris grid element.
+    mytetrisGridR.show();
+
+    // Display the front Tetris grid element.
+    mytetrisGridF.show();
+
+    // Show various gameplay buttons and controls.
     upButton.show();
-    downButton.show()
+    downButton.show();
     leftButton.show();
     rightButton.show();
     rotateU.show();
@@ -274,6 +315,8 @@ function outputs() {
     rotateL.show();
     rotateR.show();
     dropButton.show();
+
+    // Hide non-gameplay buttons.
     overButton.hide();
     settingsmainButton.hide();
     exitButton.hide();
@@ -285,13 +328,18 @@ function outputs() {
     muteButton.hide();
     trackSelector.hide();
   }
+  // Check if the game progression is at the main menu.
   else if (gameProgression == "mMenu") {
-    mainMenu()
+    // Call the mainMenu function to display the main menu.
+    mainMenu();
   }
 
+  // Check if the game progression is in a "pause" state.
   else if (gameProgression == "pause") {
-    pauseMenu()
+    // Call the pauseMenu function to display the pause menu.
+    pauseMenu();
   }
+
   else if (gameProgression == "over") {
     overMenu()
   }

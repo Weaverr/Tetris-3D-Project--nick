@@ -1,24 +1,38 @@
-function mainMenu(){
+// Function to display the main menu.
+function mainMenu() {
+    // Set the background color to the main ground color.
     background(mainGround);
-    settingsmainButton.size(400,100);
+
+    // Set the size and position of the "Settings" button for the main menu.
+    settingsmainButton.size(400, 100);
     settingsmainButton.position(windowWidth / 2 - 200, windowHeight / 2 + 160);
+
     setCamera(menuCam);
+
+    // Show the "Main Menu" button.
     mMenuButton.show();
-    tutorialmainButton.size(400,100);
+
+    // Set the size and position of the "Tutorial" button for the main menu.
+    tutorialmainButton.size(400, 100);
     tutorialmainButton.position(windowWidth / 2 - 200, windowHeight / 2 + 270);
-    push();
+
+    // Display the "Tetris 3D" title text.
+    push(); 
     textSize(100);
-    fill(0);
-    text("Tetris 3D", 0, -200);
-    pop();
-    translate(10,-250,-500);
+    fill(0); 
+    text("Tetris 3D", 0, -200); 
+    pop(); 
+
+    // Translate and rotate to create an animated box.
+    translate(10, -250, -500);
     rotateX(frameCount * 1);
     rotateY(frameCount * 1);
-    stroke('lime');
-    box(250);
+    stroke('lime'); 
+    box(250); 
 
+    // Hide various buttons and UI elements for the main menu.
     upButton.hide();
-    downButton.hide()
+    downButton.hide();
     leftButton.hide();
     rightButton.hide();
     rotateU.hide();
@@ -39,22 +53,38 @@ function mainMenu(){
     colorPicker.hide();
 }
 
-function pauseMenu(){
+
+// The pauseMenu function is responsible for displaying the pause menu.
+function pauseMenu() {
+    // Set the background color to the pause ground color.
     background(pauseGround);
+
     setCamera(menuCam);
+
+    // Show the "Settings" button for the pause menu.
     settingspauseButton.show();
+
+    // Show the "Exit" button for the pause menu and position it.
     exitButton.show();
     exitButton.position(windowWidth / 2 - 100, windowHeight / 2 + 210);
+
+    // Show the "Tutorial" button for the pause menu.
     tutorialpauseButton.show();
-    push();
+
+    // Display the "Pause Menu" title text.
+    push(); 
     textSize(100);
     fill(0);
-    text("Pause Menu", 0, -200);
+    text("Pause Menu", 0, -200); 
+    
+    // Display a message to instruct the player to press 'p' to continue.
     textSize(50);
     text("Press 'p' to continue", 0, -75);
-    pop();
+    pop(); 
+
+    // Hide various buttons and UI elements while in the pause menu.
     upButton.hide();
-    downButton.hide()
+    downButton.hide();
     leftButton.hide();
     rightButton.hide();
     rotateU.hide();
@@ -71,6 +101,7 @@ function pauseMenu(){
     trackSelector.hide();
     colorPicker.hide();
 }
+
 
 function overMenu(){
     background(mainGround);
