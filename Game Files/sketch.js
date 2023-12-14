@@ -1,8 +1,8 @@
 function preload() {
   arial = loadFont('arial.ttf');
-  option1 = loadSound('Music Files/Track1.mp3');
-  option2 = loadSound('Music Files/Track2.mp3');
-  option3 = loadSound('Music Files/Track3.mp3');
+  option1 = loadSound('Game Music/Music Files/Track1.mp3');
+  option2 = loadSound('Game Music/Music Files/Track2.mp3');
+  option3 = loadSound('Game Music/Music Files/Track3.mp3');
 }
 
 
