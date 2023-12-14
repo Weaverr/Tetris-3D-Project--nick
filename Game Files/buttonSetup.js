@@ -8,7 +8,6 @@ function buttonInitialise(){
     rightButton = createButton('Right');
     dropButton = createButton('Drop');
     mMenuButton = createButton('Press to play');
-    overButton = createButton('Back to main menu');
     settingsmainButton = createButton('Settings');
     exitButton = createButton('Back to main menu');
     tutorialmainButton = createButton('How to play');
@@ -40,7 +39,6 @@ function buttonInitialise(){
     rotateR.size(80, 40);
     dropButton.size(500, 100);
     mMenuButton.size(400, 100);
-    overButton.size(400, 100);
     settingsmainButton.size(200,100);
     exitButton.size(200,100);
     tutorialmainButton.size(200,100);
@@ -62,7 +60,6 @@ function buttonInitialise(){
     rotateR.position(1790, windowHeight / 2 + 20);
     dropButton.position(windowWidth / 2 - 250, windowHeight / 2 + 260);
     mMenuButton.position(windowWidth / 2 - 200, windowHeight / 2 + 50);
-    overButton.position(windowWidth / 2 - 250, windowHeight / 2 + 260);
     settingsmainButton.position(windowWidth / 2 - 100, windowHeight / 2 - 10);
     exitButton.position(windowWidth / 2 - 100, windowHeight / 2 + 210);
     tutorialmainButton.position(windowWidth / 2 - 100, windowHeight / 2 + 100);
@@ -86,7 +83,6 @@ function buttonInitialise(){
     dropButton.mousePressed(startDropping);
     dropButton.mouseReleased(stopDropping);
     mMenuButton.mouseReleased(playGame);
-    overButton.mouseReleased(returnTomMenu);
     exitButton.mouseReleased(returnTomMenu);
     tutorialmainButton.mouseReleased(returnTotMain);
     settingsmainButton.mouseReleased(returnTosMain);
@@ -106,7 +102,6 @@ function buttonInitialise(){
     rotateL.hide();
     rotateR.hide();
     dropButton.hide();
-    overButton.hide();
     settingsmainButton.hide();
     exitButton.hide();
     tutorialmainButton.hide();

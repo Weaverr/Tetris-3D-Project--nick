@@ -40,7 +40,6 @@ function mainMenu() {
     rotateL.hide();
     rotateR.hide();
     dropButton.hide();
-    overButton.hide();
     settingsmainButton.show();
     exitButton.hide();
     tutorialmainButton.show();
@@ -92,7 +91,6 @@ function pauseMenu() {
     rotateL.hide();
     rotateR.hide();
     dropButton.hide();
-    overButton.hide();
     tutorialmainButton.hide();
     settingsmainButton.hide();
     exitToPauseButton.hide();
@@ -121,7 +119,6 @@ function overMenu(){
     rotateR.hide();
     dropButton.hide();
     mMenuButton.hide();
-    overButton.show();
     settingsmainButton.hide();
     exitButton.hide();
     tutorialmainButton.hide();
@@ -154,7 +151,6 @@ function tutorialMainOption(){
     rotateL.hide();
     rotateR.hide();
     dropButton.hide();
-    overButton.hide();
     settingsmainButton.hide();
     exitButton.show();
     mMenuButton.hide();
@@ -186,7 +182,6 @@ function tutorialPauseOption(){
     rotateL.hide();
     rotateR.hide();
     dropButton.hide();
-    overButton.hide();
     settingsmainButton.hide();
     tutorialpauseButton.hide()
     exitButton.hide();
@@ -226,7 +221,6 @@ function settingsMainOption(){
     rotateL.hide();
     rotateR.hide();
     dropButton.hide();
-    overButton.hide();
     settingsmainButton.hide();
     exitButton.show();
     mMenuButton.hide();
@@ -265,7 +259,6 @@ function settingsPauseOption(){
     rotateL.hide();
     rotateR.hide();
     dropButton.hide();
-    overButton.hide();
     settingsmainButton.hide();
     exitButton.hide();
     mMenuButton.hide();

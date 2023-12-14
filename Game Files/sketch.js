@@ -258,7 +258,6 @@ function processes() {
     rotateL.hide();
     rotateR.hide();
     dropButton.hide()
-    overButton.hide()
     mMenuButton.hide()
     exitButton.hide()
     settingsmainButton.hide()
@@ -317,7 +316,6 @@ function outputs() {
     dropButton.show();
 
     // Hide non-gameplay buttons.
-    overButton.hide();
     settingsmainButton.hide();
     exitButton.hide();
     tutorialmainButton.hide();
