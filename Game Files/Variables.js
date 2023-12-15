@@ -14,10 +14,8 @@ let currentGround = [255, 255, 255];
 let mainGround = [255, 255, 255];
 let pauseGround = [255, 255, 255];
 let arial;
-
-
-
 let option1, option2, option3
+
 let muteButton;
 let isMuted = false;
 let colorPicker;

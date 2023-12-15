@@ -2,6 +2,8 @@
 function preload() {
   // Load the 'arial.ttf' font file and assign it to the variable 'arial'.
   arial = loadFont('arial.ttf');
+
+  // Load the sound file 'Track1.mp3','Track2.mp3','Track3.mp3' from the 'Game Music/Music Files' directory and assign it to the variable 'option1'.
   option1 = loadSound('Game Music/Music Files/Track1.mp3');
   option2 = loadSound('Game Music/Music Files/Track2.mp3');
   option3 = loadSound('Game Music/Music Files/Track3.mp3');
@@ -57,7 +59,7 @@ function playGame() {
   gameProgression = "play";
 
   // Call the playMusic function to start playing background music or sound.
-  //playMusic();
+  playMusic();
 }
 
 
@@ -338,23 +340,34 @@ function outputs() {
     pauseMenu();
   }
 
+  // Check if the game progression is in the "over" state, which indicates the game is over.
   else if (gameProgression == "over") {
-    overMenu()
+    // Call the overMenu function to display the game over menu.
+    overMenu();
   }
 
+  // Check if the game progression is in the "tutorialMain" state.
   else if (gameProgression == "tutorialMain") {
-    tutorialMainOption()
-
+    // Call the tutorialMainOption function to display the tutorial menu in the main menu.
+    tutorialMainOption();
   }
+
+  // Check if the game progression is in the "tutorialPause" state.
   else if (gameProgression == "tutorialPause") {
-    tutorialPauseOption()
+    // Call the tutorialPauseOption function to display the tutorial menu in the pause menu.
+    tutorialPauseOption();
   }
 
+
+  // Check if the game progression is in the "settingsMain" state.
   else if (gameProgression == "settingsMain") {
-    settingsMainOption()
+    // Call the settingsMainOption function to display the settings menu in the main menu.
+    settingsMainOption();
   }
 
+  // Check if the game progression is in the "settingsPause" state.
   else if (gameProgression == "settingsPause") {
-    settingsPauseOption()
+    // Call the settingsPauseOption function to display the settings menu in the pause menu.
+    settingsPauseOption();
   }
 }

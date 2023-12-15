@@ -1,22 +1,32 @@
+// The setVolume function updates the volume of the currently playing song based on the value of the volume slider.
 function setVolume() {
-    let volume = volumeSlider.value();
-    if (currentSong) {
-        currentSong.setVolume(volume);
-    }
+  // Get the volume value from the volumeSlider element.
+  let volume = volumeSlider.value();
+
+  // Check if there is a currently playing song.
+  if (currentSong && isMuted == false) {
+    // Set the volume of the current song to the selected value.
+    currentSong.setVolume(volume);
   }
-  
-  function toggleMute() {
-    if (isMuted) {
-        currentSong.setVolume(0.5); // Restore previous volume
-        muteButton.html('Mute');
-        isMuted = false;
-    } else {
-        currentSong.setVolume(0); // Mute the song
-        muteButton.html('Unmute');
-        isMuted = true;
-    }
+}
+
+// The toggleMute function allows toggling the mute state of the currently playing song.
+
+function toggleMute() {
+  // Check if the audio is currently muted.
+  if (isMuted) {
+    // If muted, restore the previous volume (0.5) and update the button label.
+    currentSong.setVolume(0.5); // Restore previous volume
+    muteButton.html('Mute');
+    isMuted = false;
+  } else {
+    // If not muted, mute the song (volume set to 0) and update the button label.
+    currentSong.setVolume(0); // Mute the song
+    muteButton.html('Unmute');
+    isMuted = true;
   }
-  
+}
+
   function changeTrack() {
     let selectedTrack = trackSelector.value();
     if (selectedTrack === 'Track 1 (Original)') {
@@ -42,8 +52,11 @@ function setVolume() {
     setVolume(); // Update volume for the new track
   }
 
+// The playMusic function is used to play background music.
+
 function playMusic() {
-    if (!currentSong.isPlaying()) {
-      currentSong.loop(); // Loop the song
-    }
+  // Check if the current song is not already playing.
+  if (!currentSong.isPlaying()) {
+    currentSong.loop(); // Loop the song to play it continuously.
+  }
 }

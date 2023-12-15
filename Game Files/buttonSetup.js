@@ -1,20 +1,21 @@
 // The buttonInitialize function is responsible for creating buttons with labels.
 function buttonInitialise(){
     // Create buttons with labels
-    // gotta change the settingsPauseButton shit rememebr when U SEEEEEEEE
     upButton = createButton('Up');
     downButton = createButton('Down');
     leftButton = createButton('Left');
     rightButton = createButton('Right');
     dropButton = createButton('Drop');
     mMenuButton = createButton('Press to play');
-    settingsmainButton = createButton('Settings');
     exitButton = createButton('Back to main menu');
     tutorialmainButton = createButton('How to play');
+    settingsmainButton = createButton('Settings');
     tutorialpauseButton = createButton('How to play');
     settingspauseButton = createButton('Settings')
     exitToPauseButton = createButton('Back to pause menu');
+
     volumeSlider = createSlider(0, 1, 0.5, 0.01);
+    
     muteButton = createButton('Mute');
     trackSelector = createSelect();
     colorPicker = createColorPicker('#ffffff');
@@ -28,7 +29,7 @@ function buttonInitialise(){
     trackSelector.option('Track 2', 'Track 2');
     trackSelector.option('Track 3', 'Track 3');
   
-      // Create button sizes
+    // Create button sizes
     upButton.size(80, 40);
     downButton.size(80, 40);
     leftButton.size(80, 40);
@@ -116,32 +117,39 @@ function buttonInitialise(){
     mMenuButton.hide();
 }
 
+// The returnToMainMenu function is called to return to the main menu.
 function returnTomMenu() {
-    console.log("triggered");
-    gameProgression = "mMenu";
-  }
-  
-  function returnToPause(){
-    console.log("triggered");
-    gameProgression = "pause"
-  }
-  
-  function returnTotPause(){
-    console.log("triggered");
-    gameProgression = "tutorialPause";
-  }
-  
-  function returnTosPause(){
-    console.log("triggered");
-    gameProgression = "settingsPause";
-  }
-  
-  function returnTotMain(){
-    console.log("triggered");
-    gameProgression = "tutorialMain";
-  }
-  
-  function returnTosMain(){
-    console.log("triggered");
-    gameProgression = "settingsMain";
-  }
+  console.log("triggered"); 
+  gameProgression = "mMenu"; // Set the game progression state to "mMenu."
+}
+
+// The returnToPause function is called to return to the pause menu.
+function returnToPause() {
+  console.log("triggered"); 
+  gameProgression = "pause"; // Set the game progression state to "pause."
+}
+
+// The returnToSettingsPause function is called to return to the settings menu within the pause menu.
+function returnTosPause() {
+  console.log("triggered"); 
+  gameProgression = "settingsPause"; // Set the game progression state to "settingsPause."
+}
+
+// The returnToSettingsMain function is called to return to the settings menu within the main menu.
+function returnTosMain() {
+  console.log("triggered"); 
+  gameProgression = "settingsMain"; // Set the game progression state to "settingsMain."
+}
+
+// The returnToTutorialPause function is called to return to the tutorial menu within the pause menu.
+function returnTotPause() {
+  console.log("triggered"); // Output a message to the console for debugging or logging.
+  gameProgression = "tutorialPause"; // Set the game progression state to "tutorialPause."
+}
+
+// The returnToTutorialMain function is called to return to the tutorial menu within the main menu.
+function returnTotMain() {
+  console.log("triggered"); // Output a message to the console for debugging or logging.
+  gameProgression = "tutorialMain"; // Set the game progression state to "tutorialMain."
+}
+
